@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>SYSTEM COMPROMISED // HACKED BY ARUNACHALAM // ArcXOS</title>
+  <meta name="description" content="ArcXOS Security Research & Presentation Console - Hacked by Arunachalam M., Arch Linux Specialist & Cybersecurity Engineer.">
+  <meta name="theme-color" content="#05080c">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/jpeg" href="assets/ferocious_cyber_skull.jpg">
+</head>
+<body>
+
+  <!-- CRT Scanlines & Vignette Layer -->
+  <div class="crt-overlay"></div>
+
+  <!-- Background Matrix Rain Canvas -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- =========================================================================
+       10-15s HACKER BOOT & DEVICE TAKEOVER OVERLAY
+       ========================================================================= -->
+  <div id="boot-overlay">
+    <div class="boot-header">
+      <div class="boot-brand">
+        <span>⚡ ARCXOS_KERNEL_v6.10.9 // HOST INTERCEPT</span>
+      </div>
+      <button id="skip-boot-btn" class="boot-skip-btn" title="Skip to console for live presentations">
+        ⚡ OVERRIDE / SKIP [ENTER CONSOLE]
+      </button>
+    </div>
+
+    <div class="boot-content">
+      <!-- Fast scrolling boot & breach telemetry logs -->
+      <div id="boot-logs" class="boot-logs-container"></div>
+
+      <!-- Takeover Climax Banner (Triggers at climax) -->
+      <div id="takeover-banner" class="takeover-banner-modal hidden">
+        <div class="takeover-skull-badge">
+          <img src="assets/ferocious_cyber_skull.jpg" alt="Cyber Skull Takeover Badge">
+        </div>
+        <div class="takeover-title">⚠️ SYSTEM COMPROMISED ⚠️</div>
+        <div class="takeover-sub">THIS DEVICE HAS BEEN HACKED BY <span>ARUNACHALAM</span></div>
+        <div class="takeover-meta">
+          HOST: <span data-telemetry="os">INTERROGATING...</span> // UID: 0 (ROOT_SHELL_ACTIVATED)
+        </div>
+      </div>
+    </div>
+
+    <div class="boot-footer">
+      <div class="progress-header">
+        <span id="boot-status-label">EXECUTING ZERO-DAY MEMORY CORRUPTION & ELEVATION...</span>
+        <span id="boot-progress-percent">0%</span>
+      </div>
+      <div class="progress-track">
+        <div id="boot-progress-bar" class="progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MAIN OPERATIONS CONSOLE / PRESENTATION DASHBOARD
+       ========================================================================= -->
+  <main id="main-dashboard" class="dashboard-blur">
+
+    <!-- Top HUD Navigation Bar -->
+    <nav class="hud-navbar">
+      <div class="hud-logo">
+        <div class="hud-logo-icon">
+          <img src="assets/ferocious_cyber_skull.jpg" alt="ArcXOS Logo">
+        </div>
+        <div>
+          <div class="hud-brand-title">ARCXOS // ARUNACHALAM</div>
+          <span class="hud-status-tag">● STATUS: TARGET HOST COMPROMISED</span>
+        </div>
+      </div>
+
+      <div class="hud-controls">
+        <button id="replay-takeover-btn" class="hud-btn hud-btn-danger" title="Replay 14-sec device takeover">
+          <span>☠️ REPLAY TAKEOVER</span>
+        </button>
+        <button id="toggle-audio-btn" class="hud-btn" title="Toggle cyber sound effects">
+          <span>🔊 AUDIO: ON</span>
+        </button>
+        <button id="toggle-matrix-btn" class="hud-btn btn-active" title="Toggle background matrix rain">
+          <span>⚡ MATRIX: ON</span>
+        </button>
+        <button id="toggle-fullscreen-btn" class="hud-btn" title="Toggle Fullscreen presentation mode">
+          <span>📺 PRESENTATION MODE</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- HERO SECTION: Device Takeover Confirmation -->
+    <section class="hero-breach-section">
+      <div class="breach-card">
+        <div class="breach-grid">
+          <div>
+            <div class="breach-badge-row">
+              <span class="pill-danger">CRITICAL ALERT: ROOT LEVEL BREACH</span>
+              <span class="pill-accent">OPERATOR: ARUNACHALAM M.</span>
+              <span class="pill-accent">BASE: ARCH LINUX [X86_64]</span>
+            </div>
+
+            <h1 class="hero-main-title">
+              THIS DEVICE HAS BEEN HACKED BY <span class="highlight-name">ARUNACHALAM</span>
+            </h1>
+
+            <p class="hero-tagline">
+              Target host subsystem compromised. Full administrative privileges harvested via 
+              <strong>ArcXOS Hardened Kernel</strong> &amp; <strong>Luna AI</strong> offensive cyber modules.
+            </p>
+
+            <!-- MANDATORY EDUCATIONAL & ETHICAL HACKING DISCLAIMER -->
+            <div class="ethical-disclaimer-box">
+              <div class="disclaimer-title">
+                <span>🛡️ MANDATORY ETHICAL HACKING &amp; PRESENTATION NOTICE</span>
+              </div>
+              <p>
+                This website and interactive interface are developed strictly for 
+                <strong>EDUCATIONAL PURPOSES, ETHICAL HACKING DEMONSTRATIONS, and LIVE ACADEMIC/TECHNICAL PRESENTATIONS</strong>.
+                All telemetry showcased utilizes benign client browser APIs. No malicious code is distributed.
+              </p>
+            </div>
+
+            <div class="hero-cta-group">
+              <a href="https://www.google.com/search?q=Arunachalam+archlinux" target="_blank" rel="noopener noreferrer" class="cta-btn-primary">
+                🔍 SEARCH "ARUNACHALAM ARCHLINUX" ON GOOGLE
+              </a>
+              <a href="#interactive-terminal" class="cta-btn-secondary">
+                💻 INTERACTIVE TERMINAL
+              </a>
+              <a href="#target-diagnostics" class="cta-btn-secondary">
+                ⚡ TARGET TELEMETRY
+              </a>
+            </div>
+          </div>
+
+          <!-- Hero Visual Feature Box -->
+          <div class="breach-visual-box">
+            <img src="assets/hacker_cyber_hoodie.jpg" alt="Arunachalam Cyber Infiltrator">
+            <div class="visual-scan-badge">
+              <span>ACTIVE C2 BEACON</span>
+              <span>PORT: 4444 (ESTABLISHED)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE CYBER TERMINAL SECTION -->
+    <section id="interactive-terminal" class="terminal-section">
+      <div class="section-title-box">
+        <h2 class="section-title">COMMAND &amp; CONTROL TERMINAL</h2>
+        <span class="section-subtitle">[ arunachalam@arcxos-breach:~# - BASH INTERFACE ]</span>
+      </div>
+
+      <div class="cyber-terminal-card">
+        <div class="terminal-titlebar">
+          <div class="window-dots">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+          </div>
+          <div class="terminal-window-title">ArcXOS Interactive Breach Shell</div>
+          <div class="terminal-window-session">
+            <span id="live-clock">2026-09-22 00:00:00 UTC</span> | UPTIME: <span id="session-uptime">00:00:00</span>
+          </div>
+        </div>
+
+        <!-- Quick Command Pills for Mobile & Presentation clicks -->
+        <div class="terminal-quick-pills">
+          <button class="term-quick-btn" data-cmd="whoami">whoami</button>
+          <button class="term-quick-btn" data-cmd="arcxos">arcxos</button>
+          <button class="term-quick-btn" data-cmd="luna">luna</button>
+          <button class="term-quick-btn" data-cmd="target">target</button>
+          <button class="term-quick-btn" data-cmd="scan">scan</button>
+          <button class="term-quick-btn" data-cmd="neofetch">neofetch</button>
+          <button class="term-quick-btn" data-cmd="exploit">exploit</button>
+          <button class="term-quick-btn" data-cmd="google">google</button>
+          <button class="term-quick-btn" data-cmd="disclaimer">disclaimer</button>
+          <button class="term-quick-btn term-quick-btn-danger" data-cmd="replay">replay</button>
+          <button class="term-quick-btn" data-cmd="clear">clear</button>
+        </div>
+
+        <!-- Terminal Output Screen -->
+        <div id="terminal-output" class="terminal-screen"></div>
+
+        <!-- Input Bar -->
+        <form id="terminal-form" class="terminal-input-bar">
+          <label for="terminal-input" class="terminal-prompt-label">arunachalam@arcxos:~#</label>
+          <input type="text" id="terminal-input" placeholder="Type command (e.g. whoami, scan, arcxos, neofetch)..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </form>
+      </div>
+    </section>
+
+    <!-- LIVE TARGET HARDWARE TELEMETRY SECTION -->
+    <section id="target-diagnostics" class="section-container">
+      <div class="section-title-box">
+        <h2 class="section-title">TARGET DEVICE TELEMETRY</h2>
+        <span class="section-subtitle">[ REAL-TIME HARDWARE &amp; NETWORK EXTRACTION ]</span>
+      </div>
+
+      <div class="telemetry-grid">
+        <div class="telemetry-node">
+          <div class="node-header">
+            <span>TARGET OPERATING SYSTEM</span>
+            <span>PLATFORM</span>
+          </div>
+          <div class="node-value" data-telemetry="os">DETECTING...</div>
+          <div class="node-status">● KERNEL VULNERABILITY EXPLOITED</div>
+        </div>
+
+        <div class="telemetry-node">
+          <div class="node-header">
+            <span>CPU PROCESSING CORES</span>
+            <span>HARDWARE</span>
+          </div>
+          <div class="node-value"><span data-telemetry="cores">8</span> LOGICAL THREADS</div>
+          <div class="node-status">● MULTI-THREAD HOOK ATTACHED</div>
+        </div>
+
+        <div class="telemetry-node">
+          <div class="node-header">
+            <span>HARDWARE GPU ENGINE</span>
+            <span>RENDERER</span>
+          </div>
+          <div class="node-value" data-telemetry="gpu">DETECTING GPU...</div>
+          <div class="node-status">● WEBGL SHADER OVERRIDE</div>
+        </div>
+
+        <div class="telemetry-node">
+          <div class="node-header">
+            <span>DISPLAY &amp; VIEWPORT</span>
+            <span>SCREEN</span>
+          </div>
+          <div class="node-value" data-telemetry="resolution">1920x1080</div>
+          <div class="node-status">● VIEWPORT: <span data-telemetry="viewport">100%</span></div>
+        </div>
+
+        <div class="telemetry-node">
+          <div class="node-header">
+            <span>NETWORK &amp; LATENCY</span>
+            <span>SOCKET</span>
+          </div>
+          <div class="node-value" data-telemetry="network">GIGABIT LAN</div>
+          <div class="node-status">● INTERCEPTED IP: <span data-telemetry="ip">192.168.1.104</span></div>
+        </div>
+
+        <div class="telemetry-node">
+          <div class="node-header">
+            <span>POWER &amp; DEVICE MEMORY</span>
+            <span>DIAGNOSTIC</span>
+          </div>
+          <div class="node-value"><span data-telemetry="battery">100%</span> | <span data-telemetry="memory">16 GB</span></div>
+          <div class="node-status">● TOUCH: <span data-telemetry="touch">ENABLED</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OPERATOR DOSSIER & SECURITY WEAPONRY -->
+    <section class="section-container">
+      <div class="section-title-box">
+        <h2 class="section-title">OPERATOR PROFILE &amp; WEAPONRY</h2>
+        <span class="section-subtitle">[ ARCH LINUX &amp; OFFENSIVE SECURITY ARSENAL ]</span>
+      </div>
+
+      <div class="dossier-grid">
+        <!-- Dossier Card -->
+        <div class="dossier-card">
+          <div class="dossier-avatar">
+            <img src="assets/ferocious_cyber_skull.jpg" alt="Arunachalam Avatar">
+          </div>
+          <h3 class="dossier-name">ARUNACHALAM M.</h3>
+          <div class="dossier-role">ARCH LINUX SPECIALIST &amp; CYBERSECURITY ARCHITECT</div>
+
+          <div class="dossier-specs-list">
+            <div><span>BASE:</span> Vellore, Tamil Nadu, India</div>
+            <div><span>EXPERIENCE:</span> 7+ Years Linux Kernel &amp; AUR Packaging</div>
+            <div><span>CORE ECOSYSTEM:</span> Arch Linux, BlackArch, Hyprland</div>
+            <div><span>KEY DISCIPLINES:</span> Penetration Testing, Zero-Day Research, Autonomous AI</div>
+          </div>
+
+          <a href="https://www.google.com/search?q=Arunachalam+archlinux" target="_blank" rel="noopener noreferrer" class="google-search-cta">
+            🌐 VERIFY ON GOOGLE: "Arunachalam archlinux"
+          </a>
+        </div>
+
+        <!-- Arsenal Showcase Cards -->
+        <div class="arsenal-grid">
+          <div class="tool-card">
+            <span class="tool-tag">OPERATING SYSTEM</span>
+            <h4 class="tool-name">ArcXOS Linux</h4>
+            <p class="tool-desc">
+              Security-hardened Arch Linux distribution integrating the BlackArch pentesting repository with Wayland Hyprland compositor and custom cyber HUD toolsets.
+            </p>
+            <div class="tool-specs">Rolling Release | 2,800+ Pentesting Modules | Hyprland WM</div>
+          </div>
+
+          <div class="tool-card">
+            <span class="tool-tag">AI CYBER ASSISTANT</span>
+            <h4 class="tool-name">Luna AI (luna-llm)</h4>
+            <p class="tool-desc">
+              Modular hacker-style AI desktop assistant engineered specifically for Linux command lines and available via Arch User Repository (AUR).
+            </p>
+            <div class="tool-specs">AUR: luna-llm | Automated Reconnaissance | Threat Triage</div>
+          </div>
+
+          <div class="tool-card">
+            <span class="tool-tag">DEFENSIVE IDS/IPS</span>
+            <h4 class="tool-name">Netwatch</h4>
+            <p class="tool-desc">
+              Real-time low-overhead network intrusion monitor and autonomous packet stream analyzer designed for Arch Linux servers.
+            </p>
+            <div class="tool-specs">Zero-Latency Socket Sniffing | Dynamic Port Shield</div>
+          </div>
+
+          <div class="tool-card">
+            <span class="tool-tag">SECURITY AUTOMATION</span>
+            <h4 class="tool-name">Cyberkit</h4>
+            <p class="tool-desc">
+              All-in-one offensive security script and framework for rapid vulnerability assessment, automated recon, and payload crafting.
+            </p>
+            <div class="tool-specs">Automated Exploitation | Memory Dump | CVE Scanner</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEROCIOUS HACKER & ANONYMOUS VISUAL GALLERY -->
+    <section class="section-container">
+      <div class="section-title-box">
+        <h2 class="section-title">CYBER WAR ROOM &amp; ANONYMOUS ARTIFACTS</h2>
+        <span class="section-subtitle">[ HIGH-FIDELITY VISUAL ASSETS // CLICK TO INSPECT ]</span>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-card">
+          <div class="gallery-img-wrapper">
+            <img src="assets/hacker_cyber_hoodie.jpg" alt="Anonymous Cyber Infiltrator with Holographic Warning HUD">
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-title">The Master Infiltrator</div>
+            <div class="gallery-sub">LED Cyber Mask // Holographic Matrix HUD</div>
+          </div>
+        </div>
+
+        <div class="gallery-card">
+          <div class="gallery-img-wrapper aspect-square">
+            <img src="assets/ferocious_cyber_skull.jpg" alt="Ferocious Cyber Skull with Arch Linux Emblem">
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-title">Ferocious Cyber Threat Entity</div>
+            <div class="gallery-sub">Arch Linux Neural Core // System Compromise Emblem</div>
+          </div>
+        </div>
+
+        <div class="gallery-card">
+          <div class="gallery-img-wrapper">
+            <img src="assets/anonymous_cyber_legion.jpg" alt="Anonymous Cyber Legion in Server Datacenter">
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-title">Shadow Network Operations</div>
+            <div class="gallery-sub">Anonymous Cybersec Grid // Datacenter Infiltration</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE PACKET INTERCEPTION & THREAT MAP CANVAS -->
+    <section class="section-container">
+      <div class="section-title-box">
+        <h2 class="section-title">NETWORK INTERCEPT &amp; ATTACK VECTOR GRAPH</h2>
+        <span class="section-subtitle">[ ACTIVE NODE RECONNAISSANCE STREAM ]</span>
+      </div>
+
+      <div class="threat-map-grid">
+        <div class="canvas-container">
+          <canvas id="threat-map-canvas"></canvas>
+        </div>
+        <div id="packet-stream-ticker" class="stream-ticker-container">
+          <div class="packet-line"><span class="text-neon">[INIT]</span> Threat telemetry stream listening...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="cyber-footer">
+      <div class="footer-author">
+        DEVELOPED BY <strong>ARUNACHALAM M.</strong> // ARCH LINUX &amp; SECURITY SPECIALIST
+      </div>
+      <div class="footer-legal-tag">
+        ⚠️ EDUCATIONAL USE ONLY // PRESENTATION DEMO // NO MALICIOUS INTENT
+      </div>
+      <div>
+        SHA-256: 0x8F9C4A21E7D01B34
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- LIGHTBOX MODAL FOR IMAGES -->
+  <div id="image-lightbox" class="hidden">
+    <button id="lightbox-close" class="lightbox-close" title="Close Lightbox">&times;</button>
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="Enlarged Visual">
+      <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <!-- JavaScript Engines -->
+  <script src="js/audio.js"></script>
+  <script src="js/telemetry.js"></script>
+  <script src="js/matrix.js"></script>
+  <script src="js/boot.js"></script>
+  <script src="js/terminal.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
