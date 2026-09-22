@@ -46,6 +46,7 @@ class BootSequence {
     if (this.bootOverlay) {
       this.bootOverlay.style.display = 'flex';
       this.bootOverlay.classList.remove('fade-out');
+      this.bootOverlay.classList.remove('takeover-alert-active');
     }
     if (this.mainDashboard) {
       this.mainDashboard.classList.add('dashboard-blur');
@@ -120,6 +121,9 @@ class BootSequence {
   }
 
   triggerTakeoverAlert() {
+    if (this.bootOverlay) {
+      this.bootOverlay.classList.add('takeover-alert-active');
+    }
     if (this.takeoverBanner) {
       this.takeoverBanner.classList.remove('hidden');
       this.takeoverBanner.classList.add('animate-glitch-drop');

@@ -28,7 +28,8 @@
 - **Custom Generated Hacker Visual Assets**:
   - High-resolution cyber images with lightbox inspection modal:
     - *The Master Infiltrator* (`assets/hacker_cyber_hoodie.jpg`)
-    - *Ferocious Cyber Threat Entity with Arch Linux Crest* (`assets/ferocious_cyber_skull.jpg`)
+    - *Operator Arunachalam M. (Gojo-Saturo Emblem)* (`assets/arunachalam_photo_2.jpeg`)
+    - *Tactical Protocol: Yoru* (`assets/arunachalam_photo_1.jpeg`)
     - *Shadow Network Operations* (`assets/anonymous_cyber_legion.jpg`)
 
 - **Synthesized Web Audio API Engine**:
