@@ -8,6 +8,14 @@ class CyberAudio {
     this.ctx = null;
     this.enabled = true;
     this.initialized = false;
+    this.startupAudio = new Audio('assets/startup-speech.mp3');
+    this.startupAudio.preload = 'auto';
+    this.startupAudio.onerror = () => {
+      if (!this.startupAudio.src.includes('jaydrosi')) {
+        this.startupAudio.src = 'assets/179010208433412148jaydrosi-voicemaker.in-speech.mp3';
+        this.startupAudio.load();
+      }
+    };
   }
 
   init() {
@@ -30,11 +38,43 @@ class CyberAudio {
     }
   }
 
+  playStartupSpeech() {
+    if (!this.enabled) return Promise.resolve(false);
+    this.resume();
+    if (this.startupAudio) {
+      this.startupAudio.currentTime = 0;
+      this.startupAudio.volume = 1.0;
+      return this.startupAudio.play().then(() => true).catch(err => {
+        console.warn("Startup speech autoplay deferred awaiting user gesture:", err);
+        return false;
+      });
+    }
+    return Promise.resolve(false);
+  }
+
+  stopStartupSpeech() {
+    if (this.startupAudio) {
+      this.startupAudio.pause();
+      this.startupAudio.currentTime = 0;
+    }
+  }
+
+  isSpeechActive() {
+    return this.startupAudio && !this.startupAudio.paused && !this.startupAudio.ended && this.startupAudio.currentTime > 0;
+  }
+
   toggle() {
     this.enabled = !this.enabled;
     if (this.enabled) {
       this.resume();
+      if (this.startupAudio && this.startupAudio.paused && this.startupAudio.currentTime > 0 && this.startupAudio.currentTime < 18.2) {
+        this.startupAudio.play().catch(() => {});
+      }
       this.playSuccess();
+    } else {
+      if (this.startupAudio) {
+        this.startupAudio.pause();
+      }
     }
     return this.enabled;
   }

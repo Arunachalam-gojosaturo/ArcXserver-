@@ -6,13 +6,15 @@
 
 ## 🚀 Features Overview
 
-- **Cinematic Hacker Boot & Device Takeover Sequence (12–14 seconds)**:
+- **Cinematic Hacker Boot & Neural Voice Takeover Sequence (21+ seconds)**:
+  - Synchronized Luna-AI speech audio transmission (`assets/startup-speech.mp3`) with live audio equalizer spectrum analyzer.
+  - Live hexadecimal memory disassembly stream (x86_64 shellcode injection and memory mapping).
   - Arch Linux UEFI initialization & kernel memory injection (`CVE-ARCXOS-2026-ROOTKIT`).
   - Dynamic hardware fingerprinting reading real client device parameters (OS, CPU threads, WebGL GPU renderer, resolution, network latency).
-  - Escalation to `UID=0 (ROOT)` and screen glitch alarm takeover with sub-bass audio impact.
+  - Escalation to `UID=0 (ROOT)` and screen glitch alarm takeover with sub-bass audio impact at climax.
   - Realistic operational tone (**zero mention of simulation**).
   - `⚡ OVERRIDE / SKIP` button for live presentation pacing.
-  - `☠️ REPLAY TAKEOVER` button to trigger the sequence on demand anytime.
+  - `☠️ REPLAY TAKEOVER` button to trigger the 21-second sequence on demand anytime.
 
 - **Interactive Cyber Terminal (`arunachalam@arcxos-breach:~#`)**:
   - Full command execution with history (arrow keys), tab auto-complete, and touch buttons for mobile.
@@ -32,8 +34,9 @@
     - *Tactical Protocol: Yoru* (`assets/arunachalam_photo_1.jpeg`)
     - *Shadow Network Operations* (`assets/anonymous_cyber_legion.jpg`)
 
-- **Synthesized Web Audio API Engine**:
-  - Browser-native synthesized audio: keystroke ticks, warning siren, sub-bass takeover drop, glitch static. Zero external mp3 dependencies!
+- **Synthesized Web Audio API & Neural Speech Engine**:
+  - Luna-AI operator voice transmission on startup (`assets/startup-speech.mp3`) with seamless autoplay handling.
+  - Browser-native synthesized cyber audio: keystroke ticks, warning sirens, sub-bass takeover drops, glitch noise bursts.
 
 - **Presentation Ready**:
   - One-click `📺 PRESENTATION MODE` (HTML5 Fullscreen API).

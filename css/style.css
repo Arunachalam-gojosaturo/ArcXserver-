@@ -32,6 +32,27 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 157, 0.4) rgba(5, 8, 12, 0.85);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(5, 8, 12, 0.85);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 157, 0.35);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-green);
+  box-shadow: 0 0 6px var(--neon-green);
 }
 
 html, body {
@@ -110,12 +131,95 @@ html, body {
   transform: scale(1.04);
 }
 
+/* Audio prompt banner for autoplay policy handling */
+.boot-audio-prompt {
+  position: absolute;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: 90%;
+  max-width: 680px;
+  animation: promptSlideDown 0.35s ease-out;
+}
+
+.boot-audio-prompt.hidden {
+  display: none;
+}
+
+@keyframes promptSlideDown {
+  from { opacity: 0; transform: translate(-50%, -15px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.audio-prompt-content {
+  background: rgba(8, 14, 24, 0.96);
+  border: 1px solid var(--neon-cyan);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.45);
+  border-radius: 6px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.audio-prompt-icon {
+  font-size: 1.5rem;
+  animation: audioPromptPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes audioPromptPulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.audio-prompt-info {
+  flex: 1;
+}
+
+.audio-prompt-info strong {
+  display: block;
+  color: var(--neon-cyan);
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  font-family: var(--font-hud);
+}
+
+.audio-prompt-info span {
+  font-size: 0.72rem;
+  color: #a4b8d1;
+  font-family: var(--font-mono);
+}
+
+.audio-prompt-btn {
+  background: var(--neon-cyan);
+  color: #05080c;
+  border: none;
+  font-family: var(--font-hud);
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 7px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.audio-prompt-btn:hover {
+  background: #fff;
+  transform: scale(1.04);
+}
+
 .boot-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 12px;
+  padding-bottom: 10px;
 }
 
 .boot-brand {
@@ -127,13 +231,30 @@ html, body {
   text-shadow: var(--neon-green-glow);
 }
 
+.boot-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.boot-protocol-tag {
+  font-size: 0.72rem;
+  color: var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  padding: 4px 10px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  font-family: var(--font-mono);
+}
+
 .boot-skip-btn {
   background: rgba(255, 0, 60, 0.15);
   border: 1px solid var(--neon-red);
   color: #fff;
   font-family: var(--font-hud);
   font-size: 0.8rem;
-  padding: 8px 16px;
+  padding: 7px 15px;
   cursor: pointer;
   letter-spacing: 1.5px;
   border-radius: 4px;
@@ -150,22 +271,78 @@ html, body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   position: relative;
   overflow: hidden;
-  margin: 16px 0;
+  margin: 12px 0;
+  min-height: 0;
+}
+
+/* 2-Column Cyber HUD Grid inside Boot Overlay */
+.boot-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 16px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.boot-terminal-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  background: rgba(3, 6, 11, 0.88);
+  border: 1px solid rgba(0, 255, 157, 0.3);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.85);
+}
+
+.boot-terminal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(9, 14, 23, 0.95);
+  border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+  font-size: 0.75rem;
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.boot-terminal-title {
+  color: var(--neon-green);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.boot-terminal-time {
+  color: var(--text-muted);
 }
 
 .boot-logs-container {
-  height: 48vh;
+  flex: 1;
   overflow-y: auto;
-  font-size: 0.85rem;
-  line-height: 1.6;
+  font-size: 0.82rem;
+  line-height: 1.55;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(0, 255, 157, 0.2);
-  border-radius: 4px;
+  background: transparent;
   scroll-behavior: smooth;
+}
+
+.boot-ascii-banner {
+  color: var(--neon-green);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.25;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+  white-space: pre;
+  overflow-x: auto;
 }
 
 .boot-line {
@@ -177,6 +354,166 @@ html, body {
 .boot-accent { color: var(--neon-green); font-weight: bold; }
 .boot-warn { color: var(--neon-amber); font-weight: bold; }
 .boot-danger { color: var(--neon-red); font-weight: bold; text-shadow: var(--neon-red-glow); }
+
+/* Cyber HUD Sidebar Widgets */
+.boot-hud-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 157, 0.3) rgba(3, 6, 11, 0.8);
+}
+
+.boot-widget {
+  background: rgba(6, 10, 18, 0.9);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #a4b8d1;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+}
+
+.pulse-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green);
+  animation: pulseIndicatorBlink 1s infinite;
+  margin-right: 4px;
+}
+
+@keyframes pulseIndicatorBlink {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; box-shadow: 0 0 12px var(--neon-green); }
+  100% { opacity: 0.4; }
+}
+
+.widget-tag {
+  font-size: 0.68rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(0, 240, 255, 0.15);
+  color: var(--neon-cyan);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+}
+
+.widget-tag-accent {
+  background: rgba(0, 255, 157, 0.15);
+  color: var(--neon-green);
+  border-color: rgba(0, 255, 157, 0.3);
+}
+
+.widget-tag-danger {
+  background: rgba(255, 0, 60, 0.15);
+  color: var(--neon-red);
+  border-color: rgba(255, 0, 60, 0.3);
+}
+
+.spectrum-visualizer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 3px;
+  height: 46px;
+  padding: 4px 6px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(0, 255, 157, 0.2);
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.spectrum-bar {
+  width: 100%;
+  background: linear-gradient(180deg, #ff003c 0%, #00f0ff 40%, #00ff9d 100%);
+  border-radius: 1px;
+  min-height: 4px;
+  transition: height 0.08s ease;
+}
+
+.spectrum-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--neon-green);
+  letter-spacing: 0.5px;
+}
+
+.boot-hex-stream {
+  height: 120px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 4px;
+  padding: 6px;
+  font-family: var(--font-mono);
+}
+
+.hex-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hex-addr {
+  color: var(--neon-cyan);
+}
+
+.hex-bytes {
+  color: #4fd8ff;
+}
+
+.boot-telemetry-mini-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 6px;
+}
+
+.mini-telemetry-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.mini-lbl {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.mini-val {
+  font-size: 0.72rem;
+  color: var(--text-main);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* Takeover Banner Popup during boot */
 .takeover-banner-modal {
@@ -192,7 +529,7 @@ html, body {
   border-radius: 8px;
   padding: 28px;
   text-align: center;
-  z-index: 50;
+  z-index: 120;
   backdrop-filter: blur(12px);
 }
 
@@ -256,9 +593,29 @@ html, body {
   letter-spacing: 1px;
 }
 
+.takeover-details {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 12px 0 16px;
+}
+
+.takeover-cta-row {
+  margin-top: 10px;
+}
+
+.takeover-google-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+}
+
 .boot-footer {
   border-top: 1px solid var(--border-subtle);
-  padding-top: 16px;
+  padding-top: 14px;
 }
 
 .progress-header {
@@ -1295,9 +1652,27 @@ html, body {
 /* ==========================================================================
    MOBILE & RESPONSIVE REFINEMENTS
    ========================================================================== */
+@media (max-width: 992px) {
+  .boot-grid {
+    grid-template-columns: 1fr;
+    height: calc(100vh - 180px);
+    overflow-y: auto;
+  }
+
+  .boot-terminal-panel {
+    min-height: 280px;
+    height: 340px;
+  }
+
+  .boot-hud-sidebar {
+    height: auto;
+    overflow-y: visible;
+  }
+}
+
 @media (max-width: 640px) {
   #boot-overlay {
-    padding: 14px 12px;
+    padding: 12px 10px;
   }
 
   .boot-header {
@@ -1306,21 +1681,47 @@ html, body {
     gap: 8px;
   }
 
-  .boot-skip-btn {
+  .boot-header-actions {
     width: 100%;
+    justify-content: space-between;
+  }
+
+  .boot-protocol-tag {
+    font-size: 0.65rem;
+    padding: 3px 6px;
+  }
+
+  .boot-skip-btn {
     text-align: center;
-    padding: 6px 10px;
+    padding: 5px 8px;
+    font-size: 0.72rem;
+  }
+
+  .boot-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    height: calc(100vh - 170px);
+    overflow-y: auto;
+  }
+
+  .boot-terminal-panel {
+    min-height: 240px;
+    height: 260px;
   }
 
   .boot-logs-container {
-    height: 38vh;
     font-size: 0.75rem;
     padding: 8px;
   }
 
+  .boot-hex-stream {
+    height: 85px;
+    font-size: 0.62rem;
+  }
+
   .takeover-banner-modal {
-    width: 95%;
-    padding: 18px 12px;
+    width: 96%;
+    padding: 16px 10px;
   }
 
   .takeover-emblem-badge {

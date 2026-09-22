@@ -150,7 +150,7 @@ class CyberTerminal {
     <tr><td class="term-hl">exploit</td><td>Inspect active memory payload and privilege elevation logs</td></tr>
     <tr><td class="term-hl">google</td><td>Search "Arunachalam archlinux" directly on Google</td></tr>
     <tr><td class="term-hl">matrix</td><td>Toggle holographic matrix code stream</td></tr>
-    <tr><td class="term-hl">replay</td><td>Rerun the 14-second device takeover sequence</td></tr>
+    <tr><td class="term-hl">replay</td><td>Rerun the 21-second neural voice device takeover sequence</td></tr>
     <tr><td class="term-hl">disclaimer</td><td>Display educational & ethical security presentation notice</td></tr>
     <tr><td class="term-hl">clear</td><td>Clear terminal screen</td></tr>
   </table>
@@ -290,7 +290,7 @@ class CyberTerminal {
   }
 
   cmdReplay() {
-    this.printLine('<span class="term-danger font-bold">[*] RE-INITIALIZING 14-SECOND DEVICE TAKEOVER PROTOCOL...</span>');
+    this.printLine('<span class="term-danger font-bold">[*] RE-INITIALIZING 21-SECOND NEURAL VOICE TAKEOVER PROTOCOL...</span>');
     setTimeout(() => {
       if (window.replayTakeover) window.replayTakeover();
     }, 400);

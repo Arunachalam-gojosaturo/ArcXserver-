@@ -20,21 +20,104 @@
   <canvas id="matrix-canvas"></canvas>
 
   <!-- =========================================================================
-       10-15s HACKER BOOT & DEVICE TAKEOVER OVERLAY
+       21s+ CINEMATIC HACKER BOOT & NEURAL VOICE TAKEOVER OVERLAY
        ========================================================================= -->
   <div id="boot-overlay">
+    <!-- Unmute prompt if browser blocks autoplay -->
+    <div id="boot-audio-prompt" class="boot-audio-prompt hidden">
+      <div class="audio-prompt-content">
+        <span class="audio-prompt-icon">🔊</span>
+        <div class="audio-prompt-info">
+          <strong>LUNA-AI NEURAL AUDIO FEED READY</strong>
+          <span>CLICK / TAP ANYWHERE TO UNMUTE LIVE OPERATOR VOICE</span>
+        </div>
+        <button id="unmute-voice-btn" class="audio-prompt-btn">⚡ UNMUTE VOICE</button>
+      </div>
+    </div>
+
     <div class="boot-header">
       <div class="boot-brand">
-        <span>⚡ ARCXOS_KERNEL_v6.10.9 // HOST INTERCEPT</span>
+        <span>⚡ ARCXOS_KERNEL_v6.10.9-arch1 // HARDENED INTERCEPT</span>
       </div>
-      <button id="skip-boot-btn" class="boot-skip-btn" title="Skip to console for live presentations">
-        ⚡ OVERRIDE / SKIP [ENTER CONSOLE]
-      </button>
+      <div class="boot-header-actions">
+        <span class="boot-protocol-tag">PROTO: LUNA-AI // SEC: NULLIFIED</span>
+        <button id="skip-boot-btn" class="boot-skip-btn" title="Skip to console for live presentations">
+          ⚡ OVERRIDE / SKIP [ENTER CONSOLE]
+        </button>
+      </div>
     </div>
 
     <div class="boot-content">
-      <!-- Fast scrolling boot & breach telemetry logs -->
-      <div id="boot-logs" class="boot-logs-container"></div>
+      <div class="boot-grid">
+        <!-- Main Terminal Boot & Breach Console Panel -->
+        <div class="boot-terminal-panel">
+          <div class="boot-terminal-bar">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <span class="boot-terminal-title">arcxos-kernel-shell [TTY1 / INTERRUPT_HOOK_RING0]</span>
+            <span class="boot-terminal-time" id="boot-clock">00:00:00 UTC</span>
+          </div>
+          <!-- Fast scrolling boot & breach telemetry logs -->
+          <div id="boot-logs" class="boot-logs-container"></div>
+        </div>
+
+        <!-- Cyber HUD Sidebar (Voice Visualizer + Hex Disassembly Stream + Telemetry) -->
+        <div class="boot-hud-sidebar">
+          <!-- Audio Spectrum Equalizer Widget -->
+          <div class="boot-widget boot-visualizer-widget">
+            <div class="widget-header">
+              <span class="pulse-indicator"></span>
+              <span>NEURAL VOICE TRANSMISSION</span>
+              <span id="boot-speech-status" class="widget-tag">LIVE 48kHz</span>
+            </div>
+            <div class="spectrum-visualizer" id="spectrum-visualizer">
+              <!-- Dynamically populated frequency bars -->
+            </div>
+            <div class="spectrum-info">
+              <span>LUNA-AI // SPEECH FEED</span>
+              <span id="speech-timer">00:00 / 00:18</span>
+            </div>
+          </div>
+
+          <!-- Hexadecimal Memory Corruption Stream -->
+          <div class="boot-widget boot-hex-widget">
+            <div class="widget-header">
+              <span>HEX MEMORY MAPPER</span>
+              <span class="widget-tag widget-tag-accent">0x7FFF_SPRAY</span>
+            </div>
+            <div id="boot-hex-stream" class="boot-hex-stream"></div>
+          </div>
+
+          <!-- Quick Intercept Telemetry Badges -->
+          <div class="boot-widget boot-telemetry-widget">
+            <div class="widget-header">
+              <span>TARGET HARDWARE EXTRACTION</span>
+              <span class="widget-tag widget-tag-danger">UID=0 ROOT</span>
+            </div>
+            <div class="boot-telemetry-mini-grid">
+              <div class="mini-telemetry-item">
+                <span class="mini-lbl">TARGET OS</span>
+                <span class="mini-val" data-telemetry="os">LINUX X86_64</span>
+              </div>
+              <div class="mini-telemetry-item">
+                <span class="mini-lbl">CPU CORES</span>
+                <span class="mini-val"><span data-telemetry="cores">8</span> THREADS</span>
+              </div>
+              <div class="mini-telemetry-item">
+                <span class="mini-lbl">GPU ACCEL</span>
+                <span class="mini-val" data-telemetry="gpu">DETECTING...</span>
+              </div>
+              <div class="mini-telemetry-item">
+                <span class="mini-lbl">GATEWAY IP</span>
+                <span class="mini-val" data-telemetry="ip">192.168.1.104</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Takeover Climax Banner (Triggers at climax) -->
       <div id="takeover-banner" class="takeover-banner-modal hidden">
@@ -46,12 +129,21 @@
         <div class="takeover-meta">
           HOST: <span data-telemetry="os">INTERROGATING...</span> // UID: 0 (ROOT_SHELL_ACTIVATED)
         </div>
+        <div class="takeover-details">
+          <span class="pill-accent">OPERATOR: ARUNACHALAM M. (MCA STUDENT &amp; ARCH LINUX SPECIALIST)</span>
+          <span class="pill-danger">ARCXOS KERNEL // LUNA-AI OFFENSIVE AUDIT</span>
+        </div>
+        <div class="takeover-cta-row">
+          <a href="https://www.google.com/search?q=Arunachalam+archlinux" target="_blank" rel="noopener noreferrer" class="cta-btn-primary takeover-google-btn">
+            🔍 SEARCH "ARUNACHALAM ARCHLINUX" ON GOOGLE
+          </a>
+        </div>
       </div>
     </div>
 
     <div class="boot-footer">
       <div class="progress-header">
-        <span id="boot-status-label">EXECUTING ZERO-DAY MEMORY CORRUPTION & ELEVATION...</span>
+        <span id="boot-status-label">EXECUTING ZERO-DAY MEMORY CORRUPTION &amp; ELEVATION...</span>
         <span id="boot-progress-percent">0%</span>
       </div>
       <div class="progress-track">
@@ -78,7 +170,7 @@
       </div>
 
       <div class="hud-controls">
-        <button id="replay-takeover-btn" class="hud-btn hud-btn-danger" title="Replay 14-sec device takeover">
+        <button id="replay-takeover-btn" class="hud-btn hud-btn-danger" title="Replay 21-sec device takeover">
           <span>☠️ REPLAY TAKEOVER</span>
         </button>
         <button id="toggle-audio-btn" class="hud-btn" title="Toggle cyber sound effects">
