@@ -74,6 +74,17 @@ class MatrixRain {
     requestAnimationFrame(() => this.animate());
   }
 
+  pause() {
+    this.active = false;
+  }
+
+  resume() {
+    if (!this.active) {
+      this.active = true;
+      this.animate();
+    }
+  }
+
   toggle() {
     this.active = !this.active;
     if (this.active) {
@@ -98,7 +109,24 @@ class CyberNetworkGrid {
     this.packets = [];
     this.maxNodes = 36;
     this.mouse = { x: -1000, y: -1000 };
+    this.active = true;
+    this.rafId = null;
     this.init();
+  }
+
+  pause() {
+    this.active = false;
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+  }
+
+  resume() {
+    if (!this.active) {
+      this.active = true;
+      this.animate();
+    }
   }
 
   init() {
@@ -154,7 +182,7 @@ class CyberNetworkGrid {
   }
 
   animate() {
-    if (!this.ctx) return;
+    if (!this.active || !this.ctx) return;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // Draw links between close nodes
@@ -233,7 +261,7 @@ class CyberNetworkGrid {
       this.ctx.shadowBlur = 0;
     }
 
-    requestAnimationFrame(() => this.animate());
+    this.rafId = requestAnimationFrame(() => this.animate());
   }
 }
 

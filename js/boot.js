@@ -31,6 +31,7 @@ class BootSequence {
     this.hexInterval = null;
     this.clockInterval = null;
     this.animFrameId = null;
+    this.scrollRafId = null;
     this.logTimeouts = [];
     this.lastSoundTick = 0;
     this.activator = null;
@@ -122,7 +123,7 @@ class BootSequence {
     for (let i = 0; i < barCount; i++) {
       const bar = document.createElement('div');
       bar.className = 'spectrum-bar';
-      bar.style.height = '15%';
+      bar.style.transform = 'scaleY(0.12)';
       this.spectrumContainer.appendChild(bar);
       this.spectrumBars.push(bar);
     }
@@ -149,6 +150,14 @@ class BootSequence {
       this.mainDashboard.classList.remove('dashboard-active');
     }
 
+    // Pause heavy background canvas loops while boot overlay covers the screen
+    if (window.matrixRain && typeof window.matrixRain.pause === 'function') {
+      window.matrixRain.pause();
+    }
+    if (window.cyberGrid && typeof window.cyberGrid.pause === 'function') {
+      window.cyberGrid.pause();
+    }
+
     // Update telemetry markers
     if (window.telemetry) {
       window.telemetry.updateDOM();
@@ -159,7 +168,7 @@ class BootSequence {
     if (this.clockInterval) clearInterval(this.clockInterval);
     this.clockInterval = setInterval(() => this.updateClock(), 1000);
 
-    // Fast streaming Hex Disassembly in sidebar (45ms interval)
+    // Fast streaming Hex Disassembly in sidebar
     this.startHexStream();
 
     // Auto-trigger startup audio speech immediately
@@ -185,11 +194,11 @@ class BootSequence {
     // Authentic, high-density Linux kernel & offensive exploit log stream (21.5s duration)
     const logs = [
       // PHASE 1: Low-Level Ring-0 Vectors & Kernel Initialization (0.0s - 3.2s)
-      { delay: 30,   text: '[    0.000000] Linux version 6.10.9-arch1-arcxos (gcc 14.2.1) #1 SMP PREEMPT_DYNAMIC', type: 'sys' },
-      { delay: 80,   text: '[    0.001042] Command line: BOOT_IMAGE=/vmlinuz root=UUID=arcxos-sec ro quiet loglevel=3 mitigations=off', type: 'sys' },
+      { delay: 30,   text: '[    0.000000] Linux version 6.10.9-arch1-arcxserver (gcc 14.2.1) #1 SMP PREEMPT_DYNAMIC', type: 'sys' },
+      { delay: 80,   text: '[    0.001042] Command line: BOOT_IMAGE=/vmlinuz root=UUID=arcxserver-sec ro quiet loglevel=3 mitigations=off', type: 'sys' },
       { delay: 140,  text: '[    0.003190] x86/fpu: Supporting XSAVE feature 0x001: \'x87 floating point registers\'', type: 'sys' },
       { delay: 200,  text: '[    0.005420] x86/fpu: Supporting XSAVE feature 0x002: \'SSE registers\'', type: 'sys' },
-      { delay: 260,  text: '[    0.008412] ArcXOS UEFI Hook: Intercept vector installed at Ring 0 [OK]', type: 'accent', scramble: true },
+      { delay: 260,  text: '[    0.008412] ARCXSERVER UEFI Hook: Intercept vector installed at Ring 0 [OK]', type: 'accent', scramble: true },
       { delay: 320,  text: `[    0.012891] smp: Brought up 1 node, ${t.cores} logical CPUs [SMP ACTIVE]`, type: 'sys' },
       { delay: 380,  text: '[    0.016420] ACPI: Early tables parsed: DSDT 0x7BAFD000, FADT, MADT verified', type: 'sys' },
       { delay: 450,  text: `[    0.021000] TARGET HOST LOCATED: ${t.os} | DISPLAY: ${t.resolution}`, type: 'accent', scramble: true },
@@ -207,8 +216,8 @@ class BootSequence {
       { delay: 1340, text: '[    0.104200] Cryptographic acceleration enabled: AES-NI, AVX-512, SHA-NI', type: 'sys' },
       { delay: 1420, text: '[    0.118900] Probing local network interfaces: eth0, wlan0, tun0 promiscuous mode ON', type: 'warn' },
       { delay: 1510, text: '[  OK  ] Promiscuous packet sniffer attached to eth0', type: 'warn' },
-      { delay: 1600, text: '[    0.132040] Loading ArcXOS kernel security subsystem: arcxos_guard.ko', type: 'sys' },
-      { delay: 1700, text: '[  OK  ] Loaded ArcXOS kernel module: Ring-0 intercept vector active', type: 'accent' },
+      { delay: 1600, text: '[    0.132040] Loading ARCXSERVER kernel security subsystem: arcxserver_core.ko', type: 'sys' },
+      { delay: 1700, text: '[  OK  ] Loaded ARCXSERVER kernel module: Ring-0 intercept vector active', type: 'accent' },
       { delay: 1800, text: '[    0.145020] Probing bus devices: 14 PCI bridges, 6 USB host controllers identified', type: 'sys' },
       { delay: 1910, text: '[    0.158400] Virtual memory pagination tables locked into physical RAM', type: 'sys' },
       { delay: 2020, text: '[    0.171200] Setting up synthetic frame buffer: Wayland DRM/KMS backend', type: 'sys' },
@@ -259,9 +268,9 @@ class BootSequence {
       { delay: 6620, text: '[  OK  ] Defensive telemetry monitoring silenced: no alerts generated', type: 'warn' },
 
       // PHASE 3: Zero-Day Staging & Kernel Memory Exploitation (6.8s - 10.8s)
-      { delay: 6850, text: '[    0.410000] Starting Arunachalam ArcXOS Kernel Security Daemon...', type: 'sys' },
+      { delay: 6850, text: '[    0.410000] Starting Arunachalam ARCXSERVER Kernel Security Daemon...', type: 'sys' },
       { delay: 6950, text: '[    0.430000] Probing virtual memory mapped registers for zero-day privilege vector...', type: 'sys' },
-      { delay: 7060, text: '[!] EXPLOIT STAGED: CVE-ARCXOS-2026-HEAP-OVERFLOW (Ring-0 Buffer Alignment)', type: 'danger', scramble: true },
+      { delay: 7060, text: '[!] EXPLOIT STAGED: CVE-ARCXSERVER-2026-HEAP-OVERFLOW (Ring-0 Buffer Alignment)', type: 'danger', scramble: true },
       { delay: 7170, text: '[    0.450199] Spraying ROP chain gadgets across memory space at 0x7FFF004B2A...', type: 'warn' },
       { delay: 7280, text: '[    0.470492] Gadget 1: pop %rdi; ret; [0xffffffff81042a10] verified', type: 'sys' },
       { delay: 7390, text: '[    0.490120] Gadget 2: mov %rax, %cr4; ret; [0xffffffff81043c80] verified', type: 'sys' },
@@ -269,7 +278,7 @@ class BootSequence {
       { delay: 7620, text: '[    0.530492] ASLR Defeated: Kernel base slide calculated at 0x1f000000', type: 'sys' },
       { delay: 7740, text: '[    0.551200] Stack Canary protection nullified: Canary=0x4a18f230 matched', type: 'accent' },
       { delay: 7860, text: '[    0.575000] Disarming security modules: AppArmor [OFF], SELinux [DISABLED], PAM [BYPASSED]', type: 'warn' },
-      { delay: 7990, text: '[    0.600210] Overriding shadow passwords: Root hash synchronized with ArcXOS keyring', type: 'sys' },
+      { delay: 7990, text: '[    0.600210] Overriding shadow passwords: Root hash synchronized with ARCXSERVER keyring', type: 'sys' },
       { delay: 8120, text: '[    0.625000] Allocating arbitrary kernel write primitive via copy_from_user() hook...', type: 'warn' },
       { delay: 8250, text: '[    0.650000] Mmapping physical page tables: 0x00000000 -> 0xFFFFFFFF writable', type: 'sys' },
       { delay: 8380, text: '[    0.675000] SMEP (Supervisor Mode Execution Prevention) cleared in %cr4', type: 'danger', scramble: true },
@@ -278,10 +287,10 @@ class BootSequence {
       { delay: 8790, text: '[    0.755000] Kernel thread stack alignment adjusted for privilege escalation', type: 'sys' },
       { delay: 8930, text: '[    0.782000] Infiltrating local keyring & injecting master cryptographic token: 0x8F9C4A21', type: 'sys' },
       { delay: 9070, text: '[    0.810000] Intercepting network sockets: TCP/SYN, DNS, TLS 1.3, SSH keys harvested', type: 'warn' },
-      { delay: 9210, text: '[    0.838000] Capturing active system processes: 184 threads redirected to ArcXOS sandbox', type: 'sys' },
+      { delay: 9210, text: '[    0.838000] Capturing active system processes: 184 threads redirected to ARCXSERVER sandbox', type: 'sys' },
       { delay: 9350, text: '[    0.866000] Memory dump verification: Heap alignment stable, zero kernel panics', type: 'accent' },
       { delay: 9500, text: '[    0.895000] Flushing CPU TLB cache lines on all logical cores', type: 'sys' },
-      { delay: 9650, text: '[    0.924000] Redirecting system interrupt table IDT[0x80] to custom ArcXOS dispatch', type: 'warn' },
+      { delay: 9650, text: '[    0.924000] Redirecting system interrupt table IDT[0x80] to custom ARCXSERVER dispatch', type: 'warn' },
       { delay: 9800, text: '[    0.954000] Disabling kernel audit subsystem: auditd logging disabled', type: 'warn' },
       { delay: 9950, text: '[    0.984000] Overriding system uptime counter: Time dilation calibrated', type: 'sys' },
       { delay: 10100, text: '[    1.014000] Probing device display controller: DRM/KMS hardware backend linked', type: 'accent' },
@@ -315,7 +324,7 @@ class BootSequence {
       { delay: 13690, text: '[    1.942000] Establishing WebSocket stream for live hardware telemetry updates', type: 'sys' },
       { delay: 13830, text: '[    1.984000] Testing sound synthesis oscillators: Sine, Square, Sawtooth, Noise ready', type: 'sys' },
       { delay: 13970, text: '[    2.026000] Calibrating CRT scanline shader and phosphor bloom intensity', type: 'accent' },
-      { delay: 14110, text: '[    2.068000] [VOICE FEED 04] >> "Welcome to ArcXOS. Full system penetration complete."', type: 'accent' },
+      { delay: 14110, text: '[    2.068000] [VOICE FEED 04] >> "Welcome to ARCXSERVER. Full system penetration complete."', type: 'accent' },
       { delay: 14250, text: '[    2.110000] Loading interactive shell dictionary: 24 custom cyber commands indexed', type: 'sys' },
       { delay: 14390, text: '[    2.152000] Pre-compiling attack simulation payloads: DDOS, SQLi, BufferOverflow', type: 'warn' },
       { delay: 14530, text: '[    2.195000] Cryptographic handshake completed successfully [ECDSA_P384]', type: 'accent' },
@@ -331,9 +340,9 @@ class BootSequence {
       { delay: 15690, text: '[    2.480000] Target host memory pages mapped to virtual display buffer: 0x00007FFF_SHARED', type: 'sys' },
       { delay: 15840, text: '[    2.530000] Neutralizing host watchdog daemons & security monitors', type: 'warn' },
       { delay: 16000, text: '[    2.580000] Overriding firewall rules: iptables -F && iptables -X', type: 'warn' },
-      { delay: 16160, text: '[    2.635000] Injecting persistence daemon: /usr/lib/systemd/system/arcxos-takeover.service', type: 'sys' },
+      { delay: 16160, text: '[    2.635000] Injecting persistence daemon: /usr/lib/systemd/system/arcxserver-takeover.service', type: 'sys' },
       { delay: 16320, text: '>>> PREPARING FULL TAKEOVER CLIMAX PROTOCOL <<<', type: 'danger', scramble: true },
-      { delay: 16500, text: '>>> ⚠️ WARNING: ARCXOS FULL SYSTEM TAKEOVER IN EFFECT! <<<', type: 'danger', scramble: true },
+      { delay: 16500, text: '>>> ⚠️ WARNING: ARCXSERVER FULL SYSTEM TAKEOVER IN EFFECT! <<<', type: 'danger', scramble: true },
       { delay: 16650, text: '[ALERT] OPERATOR TAKEOVER CONFIRMED // ALL PRIVILEGES TRANSFERRED TO ARUNACHALAM', type: 'danger' },
       { delay: 16800, text: '[ALERT] Host terminal session overridden by Ring-0 operator daemon', type: 'danger' },
       { delay: 16950, text: '[    2.890000] Audio synthesizer: Bass drop & alarm resonance peaking at +3dB', type: 'accent' },
@@ -345,7 +354,7 @@ class BootSequence {
       { delay: 17580, text: '[    3.060000] Initializing Hyprland Wayland compositor cyber HUD layers at 144Hz...', type: 'sys' },
       { delay: 17740, text: '[  OK  ] Wayland compositor initialized with GLSL CRT shader pipeline', type: 'accent' },
       { delay: 17900, text: '[    3.180000] Binding interactive command interface to pseudo-terminal /dev/pts/0', type: 'sys' },
-      { delay: 18060, text: '[    3.245000] Spawning interactive root shell: arunachalam@arcxos:~#', type: 'accent' },
+      { delay: 18060, text: '[    3.245000] Spawning interactive root shell: arunachalam@arcxserver:~#', type: 'accent' },
       { delay: 18220, text: '[    3.310000] Spawning cyber radar threat vector visualization canvas', type: 'sys' },
       { delay: 18380, text: '[    3.375000] Mounting terminal command quick pills: attack, cve, tools, matrix', type: 'accent' },
       { delay: 18540, text: '[    3.440000] Initializing live CPU / Memory / Battery / Network telemetry graphs', type: 'sys' },
@@ -359,7 +368,7 @@ class BootSequence {
       { delay: 19820, text: '[    3.960000] Operator Arunachalam M. welcomed to presentation console', type: 'accent', scramble: true },
       { delay: 20000, text: '[    4.030000] HUD Matrix telemetry streaming at 60 FPS', type: 'sys' },
       { delay: 20200, text: '[    4.110000] Entering interactive command and control mode...', type: 'accent' },
-      { delay: 20400, text: '>>> ARCXOS v6.10.9 READY // UID=0 ACCESS UNLOCKED <<<', type: 'accent', scramble: true },
+      { delay: 20400, text: '>>> ARCXSERVER v6.10.9 READY // UID=0 ACCESS UNLOCKED <<<', type: 'accent', scramble: true },
       { delay: 20650, text: 'SYSTEM READY. ENJOY THE EXPERIENCE.', type: 'accent' },
       { delay: 20900, text: '[  OK  ] TAKEOVER EXECUTION TERMINATED NORMALLY.', type: 'accent' }
     ];
@@ -407,7 +416,7 @@ class BootSequence {
 
   playStreamingTick() {
     const now = Date.now();
-    if (now - this.lastSoundTick > 55) {
+    if (now - this.lastSoundTick > 80) {
       this.lastSoundTick = now;
       if (window.cyberAudio) window.cyberAudio.playFastTick();
     }
@@ -416,9 +425,9 @@ class BootSequence {
   appendAsciiBanner() {
     const bannerText = 
 `╔═══════════════════════════════════════════════════════════════════╗
-║  ⚡ ARCXOS KERNEL v6.10.9-arch1 // HARDENED PENETRATION SYSTEM   ║
+║  ⚡ ARCXSERVER KERNEL v6.10.9-arch1 // HARDENED SERVER CORE        ║
 ║  OPERATOR : ARUNACHALAM M. (@gojosaturo)                         ║
-║  BASE     : ARCH LINUX [X86_64] // LUNA-AI NEURAL PROTOCOL       ║
+║  BASE     : ARCH LINUX [X86_64] // ARCXSERVER NEURAL PROTOCOL    ║
 ║  TARGET   : FULL PRIVILEGE HARVEST & MEMORY OVERRIDE [UID=0]     ║
 ╚═══════════════════════════════════════════════════════════════════╝`;
     const pre = document.createElement('pre');
@@ -433,21 +442,16 @@ class BootSequence {
     div.className = `boot-line boot-${type || 'sys'}`;
 
     if (scramble) {
-      div.textContent = this.generateScrambleText(text.length);
+      div.textContent = this.generateScrambleText(Math.min(text.length, 36));
       this.bootLogs.appendChild(div);
       this.scrollLogsToBottom();
 
-      // Scramble resolve effect
-      let iterations = 0;
-      const interval = setInterval(() => {
-        iterations++;
-        if (iterations >= 3 || !this.active) {
-          clearInterval(interval);
+      const tid = setTimeout(() => {
+        if (this.active && div) {
           div.textContent = text;
-        } else {
-          div.textContent = this.generatePartialScramble(text, iterations / 3);
         }
-      }, 35);
+      }, 50);
+      this.logTimeouts.push(tid);
     } else {
       div.textContent = text;
       this.bootLogs.appendChild(div);
@@ -475,9 +479,13 @@ class BootSequence {
   }
 
   scrollLogsToBottom() {
-    if (this.bootLogs) {
-      this.bootLogs.scrollTop = this.bootLogs.scrollHeight;
-    }
+    if (this.scrollRafId) return;
+    this.scrollRafId = requestAnimationFrame(() => {
+      this.scrollRafId = null;
+      if (this.bootLogs) {
+        this.bootLogs.scrollTop = this.bootLogs.scrollHeight;
+      }
+    });
   }
 
   updateStatusLabel(pct) {
@@ -493,7 +501,7 @@ class BootSequence {
     } else if (pct < 85) {
       this.statusLabel.textContent = '[5/6] ⚠️ TAKEOVER ALARM // ELEVATING ROOT PRIVILEGES: UID=0 [ROOT]...';
     } else {
-      this.statusLabel.textContent = '[6/6] BREACH CONFIRMED // LAUNCHING ARCXOS INTERACTIVE CONSOLE...';
+      this.statusLabel.textContent = '[6/6] BREACH CONFIRMED // LAUNCHING ARCXSERVER INTERACTIVE CONSOLE...';
     }
   }
 
@@ -516,34 +524,39 @@ class BootSequence {
       '48 89 E6 6A 2A 58 0F 05 [INJECT_LUNA_CORE_PAYLOAD]',
       '31 C0 48 89 E7 50 48 89 [RING_0_ARBITRARY_WRITE]',
       'E2 48 83 C4 08 0F 05 C3 [CREDENTIAL_OVERWRITE_ROOT]',
-      '48 B8 41 52 43 58 4F 53 [MOVQ $0x534F58435241,%RAX]',
+      '48 B8 41 52 43 58 53 56 [MOVQ $0x565358435241,%RAX]',
       '50 48 89 E7 48 31 F6 0F [PUSH %RAX; SYS_EXECVE]',
       'FF 25 00 00 00 00 2B 4A [JMP QWORD PTR [RIP]; KERNEL]',
       '0F 1F 84 00 00 00 00 00 [NOP DWORD PTR [RAX+RAX*1]]'
     ];
 
     let offset = 0x7fff0000;
+    const lineCount = 7;
+    const lines = [];
 
-    const pushLine = () => {
+    // Pre-create fixed DOM lines to eliminate DOM node allocation thrashing
+    for (let i = 0; i < lineCount; i++) {
+      offset += 0x10;
+      const hexAddr = '0x' + offset.toString(16).toUpperCase();
+      const code = instructions[i % instructions.length];
+      const line = document.createElement('div');
+      line.className = 'hex-line';
+      line.innerHTML = `<span class="hex-addr">${hexAddr}</span>: <span class="hex-bytes">${code}</span>`;
+      this.hexStream.appendChild(line);
+      lines.push(line);
+    }
+
+    let cursor = 0;
+    if (this.hexInterval) clearInterval(this.hexInterval);
+    this.hexInterval = setInterval(() => {
       if (!this.active || !this.hexStream) return;
       offset += 0x10;
       const hexAddr = '0x' + offset.toString(16).toUpperCase();
       const code = instructions[Math.floor(Math.random() * instructions.length)];
-      const line = document.createElement('div');
-      line.className = 'hex-line';
-      line.innerHTML = `<span class="hex-addr">${hexAddr}</span>: <span class="hex-bytes">${code}</span>`;
-
-      this.hexStream.appendChild(line);
-      if (this.hexStream.children.length > 9) {
-        this.hexStream.removeChild(this.hexStream.firstChild);
-      }
-    };
-
-    // Pre-populate
-    for (let i = 0; i < 6; i++) pushLine();
-
-    if (this.hexInterval) clearInterval(this.hexInterval);
-    this.hexInterval = setInterval(pushLine, 45); // Fast 45ms stream
+      const targetLine = lines[cursor % lineCount];
+      targetLine.innerHTML = `<span class="hex-addr">${hexAddr}</span>: <span class="hex-bytes">${code}</span>`;
+      cursor++;
+    }, 85);
   }
 
   updateVisualizer() {
@@ -581,7 +594,7 @@ class BootSequence {
           const wave = Math.sin((Date.now() / 200) + idx * 0.35);
           heightPct = Math.max(12, Math.floor(22 + wave * 12 + Math.random() * 10));
         }
-        bar.style.height = `${heightPct}%`;
+        bar.style.transform = `scaleY(${(heightPct / 100).toFixed(2)})`;
       });
     }
 
@@ -637,9 +650,21 @@ class BootSequence {
   finishTakeover() {
     this.active = false;
     this.clearTimeouts();
+    if (this.scrollRafId) {
+      cancelAnimationFrame(this.scrollRafId);
+      this.scrollRafId = null;
+    }
     if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
     if (this.hexInterval) clearInterval(this.hexInterval);
     if (this.clockInterval) clearInterval(this.clockInterval);
+
+    // Resume background canvas loops when revealing dashboard
+    if (window.matrixRain && typeof window.matrixRain.resume === 'function') {
+      window.matrixRain.resume();
+    }
+    if (window.cyberGrid && typeof window.cyberGrid.resume === 'function') {
+      window.cyberGrid.resume();
+    }
 
     if (this.progressBar) this.progressBar.style.width = '100%';
     if (this.progressPercent) this.progressPercent.textContent = '100%';

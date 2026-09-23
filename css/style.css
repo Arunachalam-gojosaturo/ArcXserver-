@@ -289,9 +289,30 @@ html, body {
 }
 
 .reactor-core-symbol {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #fff;
   text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff;
+  line-height: 1;
+}
+
+.reactor-core-brand-badge {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-hud);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #fff;
+  background: rgba(3, 7, 16, 0.9);
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 240, 255, 0.8);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.7);
+  text-shadow: 0 0 6px #00f0ff;
+  white-space: nowrap;
+  z-index: 6;
 }
 
 .reactor-hud-crosshairs {
@@ -602,7 +623,10 @@ html, body {
   line-height: 1.55;
   padding: 12px;
   background: transparent;
-  scroll-behavior: smooth;
+  scroll-behavior: auto !important;
+  overscroll-behavior: contain;
+  contain: content;
+  will-change: scroll-position;
 }
 
 .boot-ascii-banner {
@@ -617,8 +641,9 @@ html, body {
 }
 
 .boot-line {
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   word-break: break-all;
+  contain: layout style;
 }
 
 .boot-sys { color: #a4b8d1; }
@@ -714,10 +739,12 @@ html, body {
 
 .spectrum-bar {
   width: 100%;
+  height: 100%;
   background: linear-gradient(180deg, #ff003c 0%, #00f0ff 40%, #00ff9d 100%);
   border-radius: 1px;
-  min-height: 4px;
-  transition: height 0.08s ease;
+  transform-origin: bottom;
+  will-change: transform;
+  transform: scaleY(0.12);
 }
 
 .spectrum-info {
@@ -2013,6 +2040,24 @@ html, body {
     width: 160px;
     height: 160px;
     margin-bottom: 16px;
+  }
+
+  .reactor-ring-mid {
+    inset: 16px;
+  }
+
+  .reactor-ring-inner {
+    inset: 38px;
+  }
+
+  .reactor-core-symbol {
+    font-size: 1.35rem;
+  }
+
+  .reactor-core-brand-badge {
+    bottom: 4px;
+    font-size: 0.5rem;
+    padding: 1px 6px;
   }
 
   .stark-hero-title {
