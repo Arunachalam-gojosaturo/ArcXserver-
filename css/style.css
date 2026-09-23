@@ -559,6 +559,33 @@ html, body {
   box-shadow: var(--neon-red-glow);
 }
 
+.boot-fs-btn {
+  background: rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.6);
+  color: var(--neon-cyan);
+  font-family: var(--font-hud);
+  font-size: 0.78rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  letter-spacing: 1.2px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.boot-fs-btn:hover {
+  background: rgba(0, 240, 255, 0.28);
+  color: #fff;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.6);
+}
+
+.boot-fs-btn.boot-fs-active {
+  background: rgba(0, 255, 157, 0.18);
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+  box-shadow: 0 0 12px rgba(0, 255, 157, 0.45);
+}
+
 .boot-content {
   flex: 1;
   display: flex;
@@ -2086,10 +2113,11 @@ html, body {
     padding: 3px 6px;
   }
 
-  .boot-skip-btn {
+  .boot-skip-btn,
+  .boot-fs-btn {
     text-align: center;
     padding: 5px 10px;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
   }
 
   .boot-content {

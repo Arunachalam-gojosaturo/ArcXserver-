@@ -55,21 +55,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const fsBtn = document.getElementById('toggle-fullscreen-btn');
   if (fsBtn) {
     fsBtn.addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().then(() => {
-          fsBtn.innerHTML = '<span>📺 EXIT PRESENTATION</span>';
-          fsBtn.classList.add('btn-active');
-          if (window.cyberAudio) window.cyberAudio.playSuccess();
-        }).catch(() => {});
+      if (window.togglePresentationFullscreen) {
+        window.togglePresentationFullscreen();
       } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen().then(() => {
-            fsBtn.innerHTML = '<span>📺 PRESENTATION MODE</span>';
-            fsBtn.classList.remove('btn-active');
-          }).catch(() => {});
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
         }
       }
+      if (window.cyberAudio) window.cyberAudio.playSuccess();
     });
+  }
+
+  // Initial sync of fullscreen button
+  if (window.syncFullscreenUI) {
+    window.syncFullscreenUI();
   }
 
   // Replay Takeover Button

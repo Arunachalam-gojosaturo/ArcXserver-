@@ -1,4 +1,82 @@
 /**
+ * Global Fullscreen Presentation Controller
+ * Mirrors audio triggers: when audio is unlocked or site launches,
+ * fullscreen presentation mode is engaged on the same trigger.
+ */
+window.triggerPresentationFullscreen = function() {
+  const doc = document;
+  const docEl = doc.documentElement;
+  const isFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
+  if (!isFs) {
+    const req = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+    if (req) {
+      try {
+        const p = req.call(docEl);
+        if (p && typeof p.then === 'function') {
+          p.then(() => {
+            if (window.syncFullscreenUI) window.syncFullscreenUI(true);
+          }).catch(() => {
+            // Browser restricted ungestured fullscreen; will grant on first user touch/click
+          });
+        } else {
+          if (window.syncFullscreenUI) window.syncFullscreenUI(true);
+        }
+      } catch (e) {}
+    }
+  }
+};
+
+window.exitPresentationFullscreen = function() {
+  const doc = document;
+  const isFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
+  if (isFs) {
+    const exit = doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen;
+    if (exit) {
+      try {
+        const p = exit.call(doc);
+        if (p && typeof p.then === 'function') {
+          p.then(() => {
+            if (window.syncFullscreenUI) window.syncFullscreenUI(false);
+          }).catch(() => {});
+        } else {
+          if (window.syncFullscreenUI) window.syncFullscreenUI(false);
+        }
+      } catch (e) {}
+    }
+  }
+};
+
+window.togglePresentationFullscreen = function() {
+  const doc = document;
+  const isFs = !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
+  if (isFs) {
+    window.exitPresentationFullscreen();
+  } else {
+    window.triggerPresentationFullscreen();
+  }
+};
+
+window.syncFullscreenUI = function(active) {
+  const isFs = active !== undefined ? active : !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+  const fsBtn = document.getElementById('toggle-fullscreen-btn');
+  if (fsBtn) {
+    fsBtn.innerHTML = isFs ? '<span>📺 EXIT FULLSCREEN</span>' : '<span>📺 PRESENTATION MODE</span>';
+    fsBtn.classList.toggle('btn-active', isFs);
+  }
+  const bootFsBtn = document.getElementById('boot-fs-indicator');
+  if (bootFsBtn) {
+    bootFsBtn.textContent = isFs ? '📺 FULLSCREEN: ON' : '📺 FULLSCREEN MODE';
+    bootFsBtn.classList.toggle('boot-fs-active', isFs);
+  }
+};
+
+['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+  document.addEventListener(evt, () => {
+    if (window.syncFullscreenUI) window.syncFullscreenUI();
+  });
+});
+
+/**
  * Cyber Synthesizer Audio Engine (Web Audio API & HTML5 Audio)
  * Provides automatic audio launch, synthetic hacker keystrokes, alarm sirens,
  * bass impact drops, glitch static, radar pings, and exploit chimes.
@@ -63,6 +141,7 @@ class CyberAudio {
   setupAutoPlay() {
     const tryPlay = () => {
       if (!this.enabled || this.speechUnlocked) return;
+      if (window.triggerPresentationFullscreen) window.triggerPresentationFullscreen();
       this.resume();
       if (!this.startupAudio) {
         this.startupAudio = document.getElementById('cyber-startup-audio') || new Audio('assets/startup-speech.mp3');
@@ -104,6 +183,10 @@ class CyberAudio {
   attachUnlockListeners() {
     if (this._unlockHandler) return;
     this._unlockHandler = () => {
+      // Trigger Fullscreen Presentation Mode simultaneously with audio on user gesture
+      if (window.triggerPresentationFullscreen) {
+        window.triggerPresentationFullscreen();
+      }
       this.resume();
       this.playRepulsorBlast();
       if (this.startupAudio) {
@@ -176,6 +259,10 @@ class CyberAudio {
   }
 
   unlockAndPlay() {
+    // Trigger Fullscreen Presentation Mode simultaneously with audio
+    if (window.triggerPresentationFullscreen) {
+      window.triggerPresentationFullscreen();
+    }
     this.resume();
     this.playRepulsorBlast();
     const activator = document.getElementById('stark-activator');
@@ -203,6 +290,9 @@ class CyberAudio {
 
   playStartupSpeech() {
     if (!this.enabled) return Promise.resolve(false);
+    if (window.triggerPresentationFullscreen) {
+      window.triggerPresentationFullscreen();
+    }
     this.resume();
     if (!this.startupAudio) {
       this.startupAudio = document.getElementById('cyber-startup-audio') || new Audio('assets/startup-speech.mp3');

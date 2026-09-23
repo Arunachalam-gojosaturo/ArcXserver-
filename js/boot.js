@@ -40,17 +40,35 @@ class BootSequence {
   init() {
     this.activator = document.getElementById('stark-activator');
 
+    // Boot header Fullscreen Presentation Mode button
+    const bootFsBtn = document.getElementById('boot-fs-indicator');
+    if (bootFsBtn) {
+      bootFsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.togglePresentationFullscreen) {
+          window.togglePresentationFullscreen();
+        }
+      });
+    }
+
     // Skip / Override button
     if (this.skipBtn) {
       this.skipBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        if (window.triggerPresentationFullscreen) {
+          window.triggerPresentationFullscreen();
+        }
         this.finishTakeover();
       });
     }
 
-    // Keyboard ESC to instantly override / enter
+    // Keyboard ESC to instantly override / enter, or 'F' to toggle fullscreen
     window.addEventListener('keydown', (e) => {
-      if (this.active && (e.key === 'Escape' || e.key === 'Enter')) {
+      if (e.key === 'f' || e.key === 'F') {
+        if (window.togglePresentationFullscreen) {
+          window.togglePresentationFullscreen();
+        }
+      } else if (this.active && (e.key === 'Escape' || e.key === 'Enter')) {
         this.finishTakeover();
       }
     });
@@ -59,6 +77,7 @@ class BootSequence {
 
     // Check if audio is already unlocked and playing
     if (window.cyberAudio && window.cyberAudio.speechUnlocked) {
+      if (window.triggerPresentationFullscreen) window.triggerPresentationFullscreen();
       if (this.activator) this.activator.classList.add('activated');
       this.start();
       return;
@@ -68,6 +87,7 @@ class BootSequence {
     if (window.cyberAudio) {
       window.cyberAudio.playStartupSpeech().then((started) => {
         if (started) {
+          if (window.triggerPresentationFullscreen) window.triggerPresentationFullscreen();
           if (this.activator) this.activator.classList.add('activated');
           this.start();
         } else {
@@ -86,6 +106,11 @@ class BootSequence {
     const engage = () => {
       if (engaged) return;
       engaged = true;
+
+      // Trigger Fullscreen Presentation Mode alongside audio on the exact same trigger
+      if (window.triggerPresentationFullscreen) {
+        window.triggerPresentationFullscreen();
+      }
 
       if (this.activator) this.activator.classList.add('activated');
       if (window.cyberAudio) {
