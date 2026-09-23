@@ -23,8 +23,8 @@ class BootSequence {
 
     this.active = false;
     this.startTime = 0;
-    this.totalDuration = 5800; // Ultra-fast, intense 5.8s hacker takeover
-    this.climaxTime = 4100;    // Climax alert trigger at 4.1s
+    this.totalDuration = 21500; // Awesome 21.5s cinematic HUD boot (> 19s required)
+    this.climaxTime = 16500;    // Climax alert & bass drop trigger at 16.5s
     this.climaxTriggered = false;
 
     this.spectrumBars = [];
@@ -36,6 +36,18 @@ class BootSequence {
   }
 
   init() {
+    // Direct tap/click anywhere on boot overlay unlocks and plays audio
+    if (this.bootOverlay) {
+      const unlockAudio = () => {
+        if (window.cyberAudio) {
+          window.cyberAudio.unlockAndPlay();
+        }
+      };
+      this.bootOverlay.addEventListener('click', unlockAudio);
+      this.bootOverlay.addEventListener('touchstart', unlockAudio, { passive: true });
+      this.bootOverlay.addEventListener('pointerdown', unlockAudio, { passive: true });
+    }
+
     // Skip / Override button
     if (this.skipBtn) {
       this.skipBtn.addEventListener('click', (e) => {
@@ -123,68 +135,186 @@ class BootSequence {
       ip: '192.168.1.104'
     };
 
-    // Authentic, high-density Linux kernel & offensive exploit log stream
+    // Authentic, high-density Linux kernel & offensive exploit log stream (21.5s duration)
     const logs = [
-      { delay: 40,   text: '[    0.000000] Linux version 6.10.9-arch1-arcxos (gcc 14.2.1) #1 SMP PREEMPT_DYNAMIC', type: 'sys' },
+      // PHASE 1: Low-Level Ring-0 Vectors & Kernel Initialization (0.0s - 3.2s)
+      { delay: 30,   text: '[    0.000000] Linux version 6.10.9-arch1-arcxos (gcc 14.2.1) #1 SMP PREEMPT_DYNAMIC', type: 'sys' },
       { delay: 80,   text: '[    0.001042] Command line: BOOT_IMAGE=/vmlinuz root=UUID=arcxos-sec ro quiet loglevel=3 mitigations=off', type: 'sys' },
-      { delay: 120,  text: '[    0.003190] x86/fpu: Supporting XSAVE feature 0x001: \'x87 floating point registers\'', type: 'sys' },
-      { delay: 160,  text: '[    0.008412] ArcXOS UEFI Hook: Intercept vector installed at Ring 0 [OK]', type: 'accent', scramble: true },
-      { delay: 200,  text: `[    0.012891] smp: Brought up 1 node, ${t.cores} logical CPUs [SMP ACTIVE]`, type: 'sys' },
-      { delay: 250,  text: `[    0.021000] TARGET HOST LOCATED: ${t.os} | DISPLAY: ${t.resolution}`, type: 'accent', scramble: true },
-      { delay: 290,  text: `[    0.035040] GPU ENGINE ACCELERATOR: ${t.gpu}`, type: 'sys' },
-      { delay: 330,  text: `[    0.048120] INTERCEPTING HOST GATEWAY: ${t.ip} (SNIFFER_ATTACHED)`, type: 'warn' },
-      { delay: 370,  text: '[    0.062000] ACPI: Core revision 20240322, DSDT 0x7BAFD000 table verified', type: 'sys' },
-      { delay: 410,  text: '[    0.075410] systemd 256.4-1-arch: Initializing system slice target.slice', type: 'sys' },
-      { delay: 450,  text: '[  OK  ] Started Journal Service.', type: 'accent' },
-      { delay: 490,  text: '[  OK  ] Applied Kernel Variables & Security Bypass Policies.', type: 'accent' },
-      { delay: 530,  text: '[  OK  ] Mounted Huge Pages & Shared Memory IPC Subsystem.', type: 'sys' },
-      { delay: 570,  text: '>>> INJECTING BLACKARCH OFFENSIVE SECURITY REPOSITORIES (2,800+ TOOLS)...', type: 'warn' },
-      { delay: 620,  text: '[  OK  ] Loaded metasploit-framework v6.4.19-dev core primitives', type: 'accent' },
-      { delay: 660,  text: '[  OK  ] Loaded nmap 7.95 raw TCP/SYN socket scanner', type: 'sys' },
-      { delay: 700,  text: '[  OK  ] Loaded wireshark-cli packet dissect engine', type: 'sys' },
-      { delay: 740,  text: '[  OK  ] Loaded radare2 5.9.4 & ghidra binary reverse tools', type: 'accent' },
-      { delay: 780,  text: '[  OK  ] Loaded hydra, john-the-ripper, hashcat high-speed modules', type: 'sys' },
-      { delay: 820,  text: '[  OK  ] Loaded burpsuite-pro & sqlmap penetration hooks', type: 'accent' },
-      { delay: 870,  text: '[    0.142091] Starting Arunachalam ArcXOS Kernel Security Daemon...', type: 'sys' },
-      { delay: 920,  text: '[    0.180290] Probing virtual memory mapped registers for zero-day privilege vector...', type: 'sys' },
-      { delay: 970,  text: '[!] EXPLOIT STAGED: CVE-ARCXOS-2026-HEAP-OVERFLOW (Ring-0 Buffer Alignment)', type: 'danger', scramble: true },
-      { delay: 1020, text: '[    0.220199] Spraying ROP chain gadgets across memory space at 0x7FFF004B2A...', type: 'warn' },
-      { delay: 1070, text: '[    0.260492] ASLR Defeated: Kernel base slide calculated at 0x1f000000', type: 'sys' },
-      { delay: 1120, text: '[    0.301200] Stack Canary protection nullified: Canary=0x4a18f230 matched', type: 'accent' },
-      { delay: 1170, text: '[    0.345000] Disarming security modules: AppArmor [OFF], SELinux [DISABLED], PAM [BYPASSED]', type: 'warn' },
-      { delay: 1220, text: '[    0.389201] [LUNA-AI] Initializing Neural Speech Synthesizer & Offensive AI Coprocessor...', type: 'accent' },
-      { delay: 1280, text: '[    0.435012] [VOICE FEED 01] >> "Attention: This device has been accessed by Arc & Luna AI"', type: 'accent' },
-      { delay: 1340, text: '[    0.481020] [VOICE FEED 02] >> "Don\'t panic, this is a controlled ethical hacking & cybersecurity test"', type: 'sys' },
-      { delay: 1400, text: '[    0.530120] [ETHICAL DIRECTIVE] Academic and educational demonstration. Zero data destruction.', type: 'accent' },
-      { delay: 1460, text: '[    0.580210] Overriding shadow passwords: Root hash synchronized with ArcXOS keyring', type: 'sys' },
-      { delay: 1520, text: '[    0.630490] Allocating arbitrary kernel write primitive via copy_from_user() hook...', type: 'warn' },
-      { delay: 1580, text: '[    0.680120] Overwriting process credentials: current->cred->uid: 1000 -> 0 [ROOT]', type: 'danger', scramble: true },
-      { delay: 1640, text: '[    0.730490] Overwriting process credentials: current->cred->gid: 1000 -> 0 [WHEEL/ROOT]', type: 'danger' },
-      { delay: 1700, text: '[  OK  ] Ring-3 (User space) to Ring-0 (Kernel space) elevation confirmed', type: 'accent' },
-      { delay: 1760, text: '[    0.810291] Initializing Hyprland Wayland compositor cyber HUD layers at 144Hz...', type: 'sys' },
-      { delay: 1820, text: '[  OK  ] Wayland compositor initialized with GLSL CRT shader pipeline', type: 'accent' },
-      { delay: 1880, text: '[    0.890120] Establishing encrypted reverse C2 tunnel to operator node [PORT 4444]...', type: 'warn' },
-      { delay: 1940, text: '[  OK  ] C2 Beacon established: 10.66.66.1:4444 (ChaCha20-Poly1305 encrypted)', type: 'accent' },
-      { delay: 2000, text: '[    0.950120] [VOICE FEED 03] >> "Operator Arunachalam, MCA student & Arch Linux Specialist"', type: 'danger', scramble: true },
-      { delay: 2060, text: '[    1.010290] Intercepting network sockets: TCP/SYN, DNS, TLS 1.3, SSH keys harvested', type: 'warn' },
-      { delay: 2120, text: '[    1.070192] Infiltrating local keyring & injecting master cryptographic token: 0x8F9C4A21', type: 'sys' },
-      { delay: 2180, text: '[    1.130492] Netwatch IDS/IPS background packet analyzer hook installed', type: 'accent' },
-      { delay: 2240, text: '[    1.190120] Cyberkit automated recon & vulnerability triage scanner deployed', type: 'sys' },
-      { delay: 2300, text: '[    1.250490] Memory dump verification: Heap alignment stable, zero kernel panics', type: 'accent' },
-      { delay: 2360, text: '[    1.310120] Arch Linux User Repository (AUR) packages synchronized: luna-llm, hyprland-git', type: 'sys' },
-      { delay: 2420, text: '[    1.370290] Kernel ring buffer: 0 warnings, 0 denials, 100% privilege override', type: 'accent' },
-      { delay: 2480, text: '[    1.430190] Target host memory pages mapped to virtual display buffer: 0x00007FFF_SHARED', type: 'sys' },
-      { delay: 2540, text: '[    1.490210] Telemetry extraction complete: CPU, GPU, Network, Display synchronized', type: 'accent' },
-      { delay: 2600, text: '[    1.550120] Binding interactive command interface to pseudo-terminal /dev/pts/0', type: 'sys' },
-      { delay: 2660, text: '[    1.610490] Luna-AI autonomous neural guidance stream: ACTIVE [48kHz]', type: 'accent' },
-      { delay: 2720, text: '[    1.670120] Synchronizing Google verification node: "Arunachalam archlinux"', type: 'warn' },
-      { delay: 2780, text: '[    1.730290] Operator authorization verified: Arunachalam M. (@gojosaturo)', type: 'danger' },
-      { delay: 2840, text: '[    1.790190] Spawning interactive root shell: arunachalam@arcxos:~#', type: 'accent' },
-      { delay: 2900, text: '[    1.850490] Security defenses bypassed: 100% | Ring-0 Control: ACTIVE', type: 'danger' },
-      { delay: 2960, text: '[    1.910120] All subsystems operational. Finalizing cryptographic lock...', type: 'sys' },
-      { delay: 3020, text: '[  OK  ] Cryptographic handshake completed successfully [ECDSA_P384]', type: 'accent' },
-      { delay: 3080, text: '[  OK  ] Terminal pipe established. Preparing full breach notification...', type: 'warn' },
-      { delay: 3150, text: '>>> INITIALIZING FULL TAKEOVER CLIMAX PROTOCOL <<<', type: 'danger', scramble: true }
+      { delay: 140,  text: '[    0.003190] x86/fpu: Supporting XSAVE feature 0x001: \'x87 floating point registers\'', type: 'sys' },
+      { delay: 200,  text: '[    0.005420] x86/fpu: Supporting XSAVE feature 0x002: \'SSE registers\'', type: 'sys' },
+      { delay: 260,  text: '[    0.008412] ArcXOS UEFI Hook: Intercept vector installed at Ring 0 [OK]', type: 'accent', scramble: true },
+      { delay: 320,  text: `[    0.012891] smp: Brought up 1 node, ${t.cores} logical CPUs [SMP ACTIVE]`, type: 'sys' },
+      { delay: 380,  text: '[    0.016420] ACPI: Early tables parsed: DSDT 0x7BAFD000, FADT, MADT verified', type: 'sys' },
+      { delay: 450,  text: `[    0.021000] TARGET HOST LOCATED: ${t.os} | DISPLAY: ${t.resolution}`, type: 'accent', scramble: true },
+      { delay: 520,  text: '[    0.028400] CPU Microcode: 0x000000f4 updated, speculative execution vulnerabilities disabled', type: 'sys' },
+      { delay: 590,  text: `[    0.035040] GPU ENGINE ACCELERATOR: ${t.gpu}`, type: 'sys' },
+      { delay: 660,  text: '[    0.041000] PCI Express bus: 00:02.0 VGA controller mapped to BAR0 0xF0000000', type: 'sys' },
+      { delay: 730,  text: `[    0.048120] INTERCEPTING HOST GATEWAY: ${t.ip} (SNIFFER_ATTACHED)`, type: 'warn' },
+      { delay: 800,  text: `[    0.054200] Battery status: ${t.battery} power supply online [AC_MAINS]`, type: 'sys' },
+      { delay: 870,  text: '[    0.062000] Kernel memory allocator initialized: SLUB (16.0 GiB addressable)', type: 'sys' },
+      { delay: 940,  text: '[    0.075410] systemd 256.4-1-arch: Initializing system slice target.slice', type: 'sys' },
+      { delay: 1020, text: '[  OK  ] Started Journal Service.', type: 'accent' },
+      { delay: 1100, text: '[  OK  ] Applied Kernel Variables & Security Bypass Policies.', type: 'accent' },
+      { delay: 1180, text: '[  OK  ] Mounted Huge Pages & Shared Memory IPC Subsystem.', type: 'sys' },
+      { delay: 1260, text: '[    0.091000] /dev/urandom cryptographic entropy pool seeded: 4096 bits', type: 'sys' },
+      { delay: 1340, text: '[    0.104200] Cryptographic acceleration enabled: AES-NI, AVX-512, SHA-NI', type: 'sys' },
+      { delay: 1420, text: '[    0.118900] Probing local network interfaces: eth0, wlan0, tun0 promiscuous mode ON', type: 'warn' },
+      { delay: 1510, text: '[  OK  ] Promiscuous packet sniffer attached to eth0', type: 'warn' },
+      { delay: 1600, text: '[    0.132040] Loading ArcXOS kernel security subsystem: arcxos_guard.ko', type: 'sys' },
+      { delay: 1700, text: '[  OK  ] Loaded ArcXOS kernel module: Ring-0 intercept vector active', type: 'accent' },
+      { delay: 1800, text: '[    0.145020] Probing bus devices: 14 PCI bridges, 6 USB host controllers identified', type: 'sys' },
+      { delay: 1910, text: '[    0.158400] Virtual memory pagination tables locked into physical RAM', type: 'sys' },
+      { delay: 2020, text: '[    0.171200] Setting up synthetic frame buffer: Wayland DRM/KMS backend', type: 'sys' },
+      { delay: 2140, text: '[    0.185010] Scanning hardware timer interrupt ticks: HPET @ 14.31818 MHz', type: 'sys' },
+      { delay: 2260, text: '[  OK  ] Started D-Bus System Message Bus.', type: 'accent' },
+      { delay: 2390, text: '[    0.201200] Host environment fingerprinting complete: Architecture verified', type: 'sys' },
+      { delay: 2520, text: '[  OK  ] User slice user-1000.slice isolated for privilege interception', type: 'warn' },
+      { delay: 2660, text: '[    0.219000] Initializing eBPF tracing probes on sys_enter and sys_exit', type: 'sys' },
+      { delay: 2800, text: '[  OK  ] 12 eBPF kernel probes attached without detection', type: 'accent' },
+      { delay: 2950, text: '[    0.238400] Pre-allocating DMA buffers for unbuffered packet telemetry', type: 'sys' },
+      { delay: 3100, text: '[  OK  ] Kernel bootstrap phase 1 completed. Handing over to offensive runtime.', type: 'accent' },
+
+      // PHASE 2: Offensive Framework & BlackArch Repository Ingestion (3.2s - 6.8s)
+      { delay: 3250, text: '>>> INJECTING BLACKARCH OFFENSIVE SECURITY REPOSITORIES (2,800+ TOOLS)...', type: 'warn' },
+      { delay: 3330, text: '[  OK  ] BlackArch mirror synchronized: https://blackarch.org/blackarch/', type: 'accent' },
+      { delay: 3410, text: '[  OK  ] Loaded metasploit-framework v6.4.19-dev core primitives', type: 'accent' },
+      { delay: 3490, text: '[  OK  ] Loaded nmap 7.95 raw TCP/SYN socket scanner', type: 'sys' },
+      { delay: 3570, text: '[  OK  ] Loaded wireshark-cli packet dissect engine', type: 'sys' },
+      { delay: 3650, text: '[  OK  ] Loaded radare2 5.9.4 & ghidra 11.1 binary reverse tools', type: 'accent' },
+      { delay: 3730, text: '[  OK  ] Loaded hydra, john-the-ripper, hashcat high-speed modules', type: 'sys' },
+      { delay: 3810, text: '[  OK  ] Loaded burpsuite-pro & sqlmap penetration hooks', type: 'accent' },
+      { delay: 3890, text: '[  OK  ] Loaded aircrack-ng 802.11 monitor injection suite', type: 'sys' },
+      { delay: 3970, text: '[  OK  ] Loaded impacket AD authentication exploit toolset', type: 'warn' },
+      { delay: 4050, text: '[  OK  ] Loaded bloodhound graph attack vector generator', type: 'accent' },
+      { delay: 4130, text: '[  OK  ] Loaded gobuster & ffuf high-speed fuzzing engines', type: 'sys' },
+      { delay: 4210, text: '[  OK  ] Loaded searchsploit local exploit database (45,000+ zero-days)', type: 'warn' },
+      { delay: 4300, text: '[  OK  ] Loaded mimikatz lsass memory dump emulator', type: 'danger', scramble: true },
+      { delay: 4390, text: '[  OK  ] Loaded responder LLMNR/NBT-NS poisoner', type: 'sys' },
+      { delay: 4480, text: '[  OK  ] Loaded volatility3 memory forensics analyzer', type: 'sys' },
+      { delay: 4570, text: '[  OK  ] Loaded binwalk firmware extraction hooks', type: 'sys' },
+      { delay: 4660, text: '[  OK  ] Loaded evil-winrm & psexec remote shell operators', type: 'warn' },
+      { delay: 4750, text: '[  OK  ] Loaded sublist3r & amass reconnaissance engines', type: 'sys' },
+      { delay: 4840, text: '[  OK  ] Loaded nuclei automated vulnerability scanner', type: 'accent' },
+      { delay: 4930, text: '[  OK  ] Loaded wpscan & nikto web vulnerability triagers', type: 'sys' },
+      { delay: 5020, text: '[  OK  ] Loaded crackmapexec multi-protocol network penetrator', type: 'accent' },
+      { delay: 5110, text: '[  OK  ] Loaded proxychains4 dynamic SOCKS5 routing table', type: 'warn' },
+      { delay: 5210, text: '[  OK  ] Loaded beef-xss browser exploitation framework', type: 'danger', scramble: true },
+      { delay: 5310, text: '[  OK  ] Loaded ghidra headless decompiler daemon', type: 'sys' },
+      { delay: 5420, text: '[  OK  ] Loaded cobaltstrike beacon signature emulator', type: 'accent' },
+      { delay: 5530, text: '[    0.280120] Verifying cryptanalytic hash functions: SHA256, BLAKE3, Argon2id', type: 'sys' },
+      { delay: 5650, text: '[    0.294100] Compiling custom shellcode assembler: nasm -f elf64 payload.asm', type: 'sys' },
+      { delay: 5770, text: '[  OK  ] Payload shellcode compiled: 148 bytes, null-byte free', type: 'accent' },
+      { delay: 5900, text: '[    0.309000] Scanning network neighbor discovery: ARP cache parsed', type: 'sys' },
+      { delay: 6030, text: '[    0.324000] Netwatch IDS/IPS background packet analyzer hook installed', type: 'accent' },
+      { delay: 6170, text: '[    0.339000] Cyberkit automated recon & vulnerability triage scanner deployed', type: 'sys' },
+      { delay: 6310, text: '[    0.354000] All 2,800+ offensive tools verified and loaded in memory', type: 'accent' },
+      { delay: 6460, text: '[    0.370000] Arch Linux User Repository (AUR) packages synchronized: luna-llm', type: 'sys' },
+      { delay: 6620, text: '[  OK  ] Defensive telemetry monitoring silenced: no alerts generated', type: 'warn' },
+
+      // PHASE 3: Zero-Day Staging & Kernel Memory Exploitation (6.8s - 10.8s)
+      { delay: 6850, text: '[    0.410000] Starting Arunachalam ArcXOS Kernel Security Daemon...', type: 'sys' },
+      { delay: 6950, text: '[    0.430000] Probing virtual memory mapped registers for zero-day privilege vector...', type: 'sys' },
+      { delay: 7060, text: '[!] EXPLOIT STAGED: CVE-ARCXOS-2026-HEAP-OVERFLOW (Ring-0 Buffer Alignment)', type: 'danger', scramble: true },
+      { delay: 7170, text: '[    0.450199] Spraying ROP chain gadgets across memory space at 0x7FFF004B2A...', type: 'warn' },
+      { delay: 7280, text: '[    0.470492] Gadget 1: pop %rdi; ret; [0xffffffff81042a10] verified', type: 'sys' },
+      { delay: 7390, text: '[    0.490120] Gadget 2: mov %rax, %cr4; ret; [0xffffffff81043c80] verified', type: 'sys' },
+      { delay: 7500, text: '[    0.510000] Gadget 3: swapgs; iretq; [0xffffffff81045e00] verified', type: 'accent' },
+      { delay: 7620, text: '[    0.530492] ASLR Defeated: Kernel base slide calculated at 0x1f000000', type: 'sys' },
+      { delay: 7740, text: '[    0.551200] Stack Canary protection nullified: Canary=0x4a18f230 matched', type: 'accent' },
+      { delay: 7860, text: '[    0.575000] Disarming security modules: AppArmor [OFF], SELinux [DISABLED], PAM [BYPASSED]', type: 'warn' },
+      { delay: 7990, text: '[    0.600210] Overriding shadow passwords: Root hash synchronized with ArcXOS keyring', type: 'sys' },
+      { delay: 8120, text: '[    0.625000] Allocating arbitrary kernel write primitive via copy_from_user() hook...', type: 'warn' },
+      { delay: 8250, text: '[    0.650000] Mmapping physical page tables: 0x00000000 -> 0xFFFFFFFF writable', type: 'sys' },
+      { delay: 8380, text: '[    0.675000] SMEP (Supervisor Mode Execution Prevention) cleared in %cr4', type: 'danger', scramble: true },
+      { delay: 8510, text: '[    0.701000] SMAP (Supervisor Mode Access Prevention) cleared in %cr4', type: 'danger', scramble: true },
+      { delay: 8650, text: '[    0.728000] Overriding commit_creds(prepare_kernel_cred(0)) function pointers', type: 'warn' },
+      { delay: 8790, text: '[    0.755000] Kernel thread stack alignment adjusted for privilege escalation', type: 'sys' },
+      { delay: 8930, text: '[    0.782000] Infiltrating local keyring & injecting master cryptographic token: 0x8F9C4A21', type: 'sys' },
+      { delay: 9070, text: '[    0.810000] Intercepting network sockets: TCP/SYN, DNS, TLS 1.3, SSH keys harvested', type: 'warn' },
+      { delay: 9210, text: '[    0.838000] Capturing active system processes: 184 threads redirected to ArcXOS sandbox', type: 'sys' },
+      { delay: 9350, text: '[    0.866000] Memory dump verification: Heap alignment stable, zero kernel panics', type: 'accent' },
+      { delay: 9500, text: '[    0.895000] Flushing CPU TLB cache lines on all logical cores', type: 'sys' },
+      { delay: 9650, text: '[    0.924000] Redirecting system interrupt table IDT[0x80] to custom ArcXOS dispatch', type: 'warn' },
+      { delay: 9800, text: '[    0.954000] Disabling kernel audit subsystem: auditd logging disabled', type: 'warn' },
+      { delay: 9950, text: '[    0.984000] Overriding system uptime counter: Time dilation calibrated', type: 'sys' },
+      { delay: 10100, text: '[    1.014000] Probing device display controller: DRM/KMS hardware backend linked', type: 'accent' },
+      { delay: 10250, text: '[    1.045000] Intercepting hardware video buffer: Direct framebuffer write enabled', type: 'accent' },
+      { delay: 10400, text: '[    1.076000] Bypassing secure boot shim: Key revocation list updated', type: 'sys' },
+      { delay: 10550, text: '[    1.107000] Hooking Linux Kernel Module loader: sys_init_module redirected', type: 'warn' },
+      { delay: 10700, text: '[  OK  ] Ring-0 memory exploitation pipeline validated: 100% stable', type: 'accent' },
+
+      // PHASE 4: Neural AI, Speech Feeds & Identity Sync (10.8s - 14.8s)
+      { delay: 10850, text: '[    1.150000] [LUNA-AI] Initializing Neural Speech Synthesizer & Offensive AI Coprocessor...', type: 'accent' },
+      { delay: 10970, text: '[    1.185000] [LUNA-AI] Synchronizing audio stream buffers at 48kHz stereo...', type: 'accent' },
+      { delay: 11100, text: '[    1.220000] [VOICE FEED 01] >> "Attention: This device has been accessed by Arc & Luna AI"', type: 'accent' },
+      { delay: 11230, text: '[    1.258000] [LUNA-AI] Spectral audio analysis active: 20-band frequency equalizer connected', type: 'sys' },
+      { delay: 11360, text: '[    1.296000] Establishing encrypted reverse C2 tunnel to operator node [PORT 4444]...', type: 'warn' },
+      { delay: 11490, text: '[  OK  ] C2 Beacon established: 10.66.66.1:4444 (ChaCha20-Poly1305 encrypted)', type: 'accent' },
+      { delay: 11620, text: '[    1.335000] [VOICE FEED 02] >> "Don\'t panic, this is a controlled ethical hacking & cybersecurity test"', type: 'sys' },
+      { delay: 11750, text: '[    1.374000] [ETHICAL DIRECTIVE] Academic and educational demonstration. Zero data destruction.', type: 'accent' },
+      { delay: 11880, text: '[    1.413000] Neural model inference: Transformer layers active on GPU accelerator', type: 'sys' },
+      { delay: 12010, text: '[    1.452000] Synchronizing Google verification node: "Arunachalam archlinux"', type: 'warn' },
+      { delay: 12150, text: '[    1.492000] Operator identity confirmed: Arunachalam M. (Cybersecurity Specialist)', type: 'accent' },
+      { delay: 12290, text: '[    1.532000] Academic credential: MCA Student, Kongu Engineering College (Autonomous)', type: 'sys' },
+      { delay: 12430, text: '[    1.572000] Github identity verified: @gojosaturo | ArcXserver- codebase linked', type: 'sys' },
+      { delay: 12570, text: '[    1.612000] [VOICE FEED 03] >> "Operator Arunachalam, MCA student & Arch Linux Specialist"', type: 'danger', scramble: true },
+      { delay: 12710, text: '[    1.653000] Luna-AI autonomous neural guidance stream: ACTIVE [48kHz]', type: 'accent' },
+      { delay: 12850, text: '[    1.694000] Synchronizing portfolio intelligence modules: Skills, Certifications, Lab', type: 'sys' },
+      { delay: 12990, text: '[    1.735000] Network routing table updated: Gateway traffic proxied through encrypted mesh', type: 'sys' },
+      { delay: 13130, text: '[    1.776000] Hardware fingerprint hash: 0x9B4E_A712_D3C8 verified against operator registry', type: 'accent' },
+      { delay: 13270, text: '[    1.817000] Intercepting browser session cookies: Safe academic extraction', type: 'sys' },
+      { delay: 13410, text: '[    1.858000] Injecting custom Hyprland keybinds: SUPER+Q (Kill), SUPER+RETURN (Terminal)', type: 'sys' },
+      { delay: 13550, text: '[    1.900000] Pre-warming interactive presentation widgets: CVE Matrix, Terminal, Radar', type: 'accent' },
+      { delay: 13690, text: '[    1.942000] Establishing WebSocket stream for live hardware telemetry updates', type: 'sys' },
+      { delay: 13830, text: '[    1.984000] Testing sound synthesis oscillators: Sine, Square, Sawtooth, Noise ready', type: 'sys' },
+      { delay: 13970, text: '[    2.026000] Calibrating CRT scanline shader and phosphor bloom intensity', type: 'accent' },
+      { delay: 14110, text: '[    2.068000] [VOICE FEED 04] >> "Welcome to ArcXOS. Full system penetration complete."', type: 'accent' },
+      { delay: 14250, text: '[    2.110000] Loading interactive shell dictionary: 24 custom cyber commands indexed', type: 'sys' },
+      { delay: 14390, text: '[    2.152000] Pre-compiling attack simulation payloads: DDOS, SQLi, BufferOverflow', type: 'warn' },
+      { delay: 14530, text: '[    2.195000] Cryptographic handshake completed successfully [ECDSA_P384]', type: 'accent' },
+      { delay: 14680, text: '[  OK  ] Neural AI coprocessor link operational. Standing by for root elevation.', type: 'accent' },
+
+      // PHASE 5: Root Privilege Escalation & Climax Alarm Trigger at 16.5s (14.8s - 17.5s)
+      { delay: 14850, text: '[    2.250000] COMMENCING ARBITRARY KERNEL CREDENTIAL OVERWRITE...', type: 'warn' },
+      { delay: 14980, text: '[    2.295000] Overwriting process credentials: current->cred->uid: 1000 -> 0 [ROOT]', type: 'danger', scramble: true },
+      { delay: 15120, text: '[    2.340000] Overwriting process credentials: current->cred->gid: 1000 -> 0 [WHEEL/ROOT]', type: 'danger' },
+      { delay: 15260, text: '[    2.385000] Overwriting process credentials: current->cred->euid: 0 [EFFECTIVE ROOT]', type: 'danger', scramble: true },
+      { delay: 15400, text: '[    2.430000] Overwriting process credentials: current->cred->egid: 0 [EFFECTIVE ROOT]', type: 'danger' },
+      { delay: 15540, text: '[  OK  ] Ring-3 (User space) to Ring-0 (Kernel space) elevation confirmed!', type: 'accent' },
+      { delay: 15690, text: '[    2.480000] Target host memory pages mapped to virtual display buffer: 0x00007FFF_SHARED', type: 'sys' },
+      { delay: 15840, text: '[    2.530000] Neutralizing host watchdog daemons & security monitors', type: 'warn' },
+      { delay: 16000, text: '[    2.580000] Overriding firewall rules: iptables -F && iptables -X', type: 'warn' },
+      { delay: 16160, text: '[    2.635000] Injecting persistence daemon: /usr/lib/systemd/system/arcxos-takeover.service', type: 'sys' },
+      { delay: 16320, text: '>>> PREPARING FULL TAKEOVER CLIMAX PROTOCOL <<<', type: 'danger', scramble: true },
+      { delay: 16500, text: '>>> ⚠️ WARNING: ARCXOS FULL SYSTEM TAKEOVER IN EFFECT! <<<', type: 'danger', scramble: true },
+      { delay: 16650, text: '[ALERT] OPERATOR TAKEOVER CONFIRMED // ALL PRIVILEGES TRANSFERRED TO ARUNACHALAM', type: 'danger' },
+      { delay: 16800, text: '[ALERT] Host terminal session overridden by Ring-0 operator daemon', type: 'danger' },
+      { delay: 16950, text: '[    2.890000] Audio synthesizer: Bass drop & alarm resonance peaking at +3dB', type: 'accent' },
+      { delay: 17100, text: '[    2.945000] Display compositor: Full screen CRT chromatic aberration pulse active', type: 'accent' },
+      { delay: 17250, text: '[    3.000000] Master cryptographic token injected into host TPM 2.0 enclave', type: 'sys' },
+      { delay: 17400, text: '[  OK  ] Host lockdown finalized. System under total operator control.', type: 'danger' },
+
+      // PHASE 6: Compositor Initialization & Final Console Handoff (17.5s - 21.5s)
+      { delay: 17580, text: '[    3.060000] Initializing Hyprland Wayland compositor cyber HUD layers at 144Hz...', type: 'sys' },
+      { delay: 17740, text: '[  OK  ] Wayland compositor initialized with GLSL CRT shader pipeline', type: 'accent' },
+      { delay: 17900, text: '[    3.180000] Binding interactive command interface to pseudo-terminal /dev/pts/0', type: 'sys' },
+      { delay: 18060, text: '[    3.245000] Spawning interactive root shell: arunachalam@arcxos:~#', type: 'accent' },
+      { delay: 18220, text: '[    3.310000] Spawning cyber radar threat vector visualization canvas', type: 'sys' },
+      { delay: 18380, text: '[    3.375000] Mounting terminal command quick pills: attack, cve, tools, matrix', type: 'accent' },
+      { delay: 18540, text: '[    3.440000] Initializing live CPU / Memory / Battery / Network telemetry graphs', type: 'sys' },
+      { delay: 18700, text: '[    3.505000] Security defenses bypassed: 100% | Ring-0 Control: ACTIVE', type: 'danger' },
+      { delay: 18860, text: '[    3.570000] Luna-AI neural voice synthesizer: Speech completed cleanly [18.2s]', type: 'accent' },
+      { delay: 19020, text: '[    3.635000] Finalizing cryptographic handshake and access control list', type: 'sys' },
+      { delay: 19180, text: '[  OK  ] Cryptographic handshake completed successfully [ECDSA_P384]', type: 'accent' },
+      { delay: 19340, text: '[    3.765000] Arch Linux kernel modules synchronized: 0 errors, 0 panics', type: 'sys' },
+      { delay: 19500, text: '[    3.830000] All 6 takeover milestones reached successfully', type: 'accent' },
+      { delay: 19660, text: '[    3.895000] Disengaging boot intercept overlay and revealing main console...', type: 'accent' },
+      { delay: 19820, text: '[    3.960000] Operator Arunachalam M. welcomed to presentation console', type: 'accent', scramble: true },
+      { delay: 20000, text: '[    4.030000] HUD Matrix telemetry streaming at 60 FPS', type: 'sys' },
+      { delay: 20200, text: '[    4.110000] Entering interactive command and control mode...', type: 'accent' },
+      { delay: 20400, text: '>>> ARCXOS v6.10.9 READY // UID=0 ACCESS UNLOCKED <<<', type: 'accent', scramble: true },
+      { delay: 20650, text: 'SYSTEM READY. ENJOY THE EXPERIENCE.', type: 'accent' },
+      { delay: 20900, text: '[  OK  ] TAKEOVER EXECUTION TERMINATED NORMALLY.', type: 'accent' }
     ];
 
     // High-speed stream scheduler
@@ -305,18 +435,18 @@ class BootSequence {
 
   updateStatusLabel(pct) {
     if (!this.statusLabel) return;
-    if (pct < 18) {
-      this.statusLabel.textContent = '[1/6] HOOKING RING-0 INTERRUPT VECTORS & MEMORY REGISTERS...';
-    } else if (pct < 38) {
-      this.statusLabel.textContent = '[2/6] EXTRACTING TARGET TELEMETRY & HARDWARE SIGNATURES...';
-    } else if (pct < 55) {
-      this.statusLabel.textContent = '[3/6] INJECTING BLACKARCH ARSENAL & LUNA-AI NEURAL DAEMON...';
-    } else if (pct < 72) {
-      this.statusLabel.textContent = '[4/6] STAGING CVE HEAP OVERFLOW & EXECUTING ROP CHAIN...';
-    } else if (pct < 88) {
-      this.statusLabel.textContent = '[5/6] ⚠️ ELEVATING ROOT PRIVILEGES: UID=1000 -> UID=0 [ROOT]...';
+    if (pct < 16) {
+      this.statusLabel.textContent = '[1/6] HOOKING RING-0 INTERRUPT VECTORS & SYSTEM REGISTERS...';
+    } else if (pct < 32) {
+      this.statusLabel.textContent = '[2/6] HARVESTING TARGET TELEMETRY & HARDWARE GPU SIGNATURES...';
+    } else if (pct < 50) {
+      this.statusLabel.textContent = '[3/6] INJECTING BLACKARCH ARSENAL & 2,800+ OFFENSIVE TOOLS...';
+    } else if (pct < 68) {
+      this.statusLabel.textContent = '[4/6] STAGING CVE-2026 HEAP OVERFLOW & EXECUTING ROP GADGETS...';
+    } else if (pct < 85) {
+      this.statusLabel.textContent = '[5/6] ⚠️ TAKEOVER ALARM // ELEVATING ROOT PRIVILEGES: UID=0 [ROOT]...';
     } else {
-      this.statusLabel.textContent = '[6/6] TAKEOVER CONFIRMED // LAUNCHING ARCXOS CONSOLE...';
+      this.statusLabel.textContent = '[6/6] BREACH CONFIRMED // LAUNCHING ARCXOS INTERACTIVE CONSOLE...';
     }
   }
 

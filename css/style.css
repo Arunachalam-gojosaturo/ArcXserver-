@@ -146,6 +146,35 @@ html, body {
   animation: pulseIndicatorBlink 1.4s infinite;
 }
 
+.boot-audio-status-tag {
+  font-size: 0.72rem;
+  color: #ffb700;
+  background: rgba(255, 183, 0, 0.12);
+  border: 1px solid rgba(255, 183, 0, 0.5);
+  font-family: var(--font-hud);
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 3px;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+  animation: pulseIndicatorBlink 1.2s infinite;
+}
+
+.boot-audio-status-tag:hover {
+  background: rgba(255, 183, 0, 0.25);
+  box-shadow: 0 0 12px rgba(255, 183, 0, 0.4);
+}
+
+.boot-audio-status-tag.audio-active {
+  color: var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.12);
+  border-color: rgba(0, 240, 255, 0.6);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+  animation: none;
+}
+
 .boot-stream-indicator {
   display: flex;
   align-items: center;
@@ -1716,7 +1745,8 @@ html, body {
   }
 
   .boot-speed-tag,
-  .boot-protocol-tag {
+  .boot-protocol-tag,
+  .boot-audio-status-tag {
     font-size: 0.65rem;
     padding: 3px 6px;
   }

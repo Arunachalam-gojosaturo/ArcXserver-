@@ -21,8 +21,11 @@
   <!-- Background Matrix Rain Canvas -->
   <canvas id="matrix-canvas"></canvas>
 
+  <!-- Preloaded Neural Speech Audio Element -->
+  <audio id="cyber-startup-audio" src="assets/startup-speech.mp3" preload="auto" playsinline webkit-playsinline></audio>
+
   <!-- =========================================================================
-       CINEMATIC HACKER BOOT & NEURAL VOICE TAKEOVER OVERLAY (FAST STREAM)
+       CINEMATIC HACKER BOOT & NEURAL VOICE TAKEOVER OVERLAY (> 19s SEQUENCE)
        ========================================================================= -->
   <div id="boot-overlay">
     <div class="boot-header">
@@ -30,6 +33,7 @@
         <span class="brand-glitch" data-text="⚡ ARCXOS_KERNEL_v6.10.9-arch1 // HARDENED INTERCEPT">⚡ ARCXOS_KERNEL_v6.10.9-arch1 // HARDENED INTERCEPT</span>
       </div>
       <div class="boot-header-actions">
+        <span id="boot-audio-status" class="boot-audio-status-tag" role="button" tabindex="0" onclick="if(window.cyberAudio)window.cyberAudio.unlockAndPlay()" title="Click to sync Luna neural speech audio">🔊 AUDIO: AUTO-ENGAGED</span>
         <span class="boot-speed-tag">⚡ FAST STREAM 60FPS</span>
         <span class="boot-protocol-tag">PROTO: LUNA-AI // UID=0</span>
         <button id="skip-boot-btn" class="boot-skip-btn" title="Skip directly to presentation console (or press ESC)">

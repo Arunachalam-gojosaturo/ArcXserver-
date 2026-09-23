@@ -9,10 +9,20 @@ class CyberAudio {
     this.enabled = true;
     this.initialized = false;
     this.speechUnlocked = false;
+    this._unlockHandler = null;
 
-    // Primary and fallback audio assets
-    this.startupAudio = new Audio('assets/startup-speech.mp3');
-    this.startupAudio.preload = 'auto';
+    // Connect to preloaded DOM audio element or create fallback
+    this.startupAudio = document.getElementById('cyber-startup-audio');
+    if (!this.startupAudio) {
+      this.startupAudio = new Audio('assets/startup-speech.mp3');
+      this.startupAudio.preload = 'auto';
+    }
+    this.startupAudio.playsInline = true;
+    this.startupAudio.setAttribute('playsinline', '');
+    this.startupAudio.setAttribute('webkit-playsinline', '');
+    this.startupAudio.volume = 1.0;
+    this.startupAudio.muted = false;
+
     this.startupAudio.onerror = () => {
       if (!this.startupAudio.src.includes('jaydrosi')) {
         this.startupAudio.src = 'assets/179010208433412148jaydrosi-voicemaker.in-speech.mp3';
@@ -47,23 +57,29 @@ class CyberAudio {
   /**
    * Automatically launches audio when site launches.
    * If browser autoplay restrictions block immediate unmuted playback,
-   * an invisible, transparent one-time listener unlocks it upon any user touch/click/scroll
+   * an invisible, transparent listener unlocks it upon user touch/click/key
    * without requiring any manual prompt button in the UI.
    */
   setupAutoPlay() {
     const tryPlay = () => {
       if (!this.enabled || this.speechUnlocked) return;
       this.resume();
+      if (!this.startupAudio) {
+        this.startupAudio = document.getElementById('cyber-startup-audio') || new Audio('assets/startup-speech.mp3');
+      }
       if (this.startupAudio) {
+        this.startupAudio.muted = false;
         this.startupAudio.volume = 1.0;
         const playPromise = this.startupAudio.play();
         if (playPromise !== undefined) {
           playPromise.then(() => {
             this.speechUnlocked = true;
+            this.updateStatusTag(true);
             this.removeUnlockListeners();
-          }).catch(() => {
+          }).catch((err) => {
             // Autoplay blocked by browser policy without gesture;
-            // Transparently listen for any interaction to unlock immediately.
+            // Listen for any user gesture to unlock immediately.
+            this.updateStatusTag(false);
             this.attachUnlockListeners();
           });
         }
@@ -71,6 +87,7 @@ class CyberAudio {
     };
 
     // Attempt immediately when script executes and on DOM ready / window load
+    tryPlay();
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
       setTimeout(tryPlay, 50);
     } else {
@@ -83,41 +100,102 @@ class CyberAudio {
     if (this._unlockHandler) return;
     this._unlockHandler = () => {
       this.resume();
-      if (this.startupAudio && this.startupAudio.paused) {
-        this.startupAudio.play().then(() => {
-          this.speechUnlocked = true;
-        }).catch(() => {});
+      if (this.startupAudio) {
+        this.startupAudio.muted = false;
+        this.startupAudio.volume = 1.0;
+        const p = this.startupAudio.play();
+        if (p !== undefined) {
+          p.then(() => {
+            this.speechUnlocked = true;
+            this.updateStatusTag(true);
+            this.removeUnlockListeners();
+          }).catch(() => {});
+        }
       }
-      this.removeUnlockListeners();
     };
 
     const opts = { capture: true, passive: true };
-    ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown', 'scroll', 'wheel'].forEach(evt => {
+    ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'].forEach(evt => {
       window.addEventListener(evt, this._unlockHandler, opts);
+      document.addEventListener(evt, this._unlockHandler, opts);
     });
+
+    const overlay = document.getElementById('boot-overlay');
+    if (overlay) {
+      overlay.addEventListener('click', this._unlockHandler, opts);
+      overlay.addEventListener('touchstart', this._unlockHandler, opts);
+    }
+
+    const tag = document.getElementById('boot-audio-status');
+    if (tag) {
+      tag.addEventListener('click', this._unlockHandler, opts);
+    }
   }
 
   removeUnlockListeners() {
     if (this._unlockHandler) {
       const opts = { capture: true, passive: true };
-      ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown', 'scroll', 'wheel'].forEach(evt => {
+      ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'].forEach(evt => {
         window.removeEventListener(evt, this._unlockHandler, opts);
+        document.removeEventListener(evt, this._unlockHandler, opts);
       });
+      const overlay = document.getElementById('boot-overlay');
+      if (overlay) {
+        overlay.removeEventListener('click', this._unlockHandler, opts);
+        overlay.removeEventListener('touchstart', this._unlockHandler, opts);
+      }
       this._unlockHandler = null;
     }
+  }
+
+  updateStatusTag(active) {
+    const tag = document.getElementById('boot-audio-status');
+    if (tag) {
+      if (active) {
+        tag.textContent = '🔊 LUNA-AI VOICE: LIVE 48kHz';
+        tag.classList.add('audio-active');
+      } else {
+        tag.textContent = '🔊 AUDIO: TAP ANYWHERE TO SYNC';
+        tag.classList.remove('audio-active');
+      }
+    }
+  }
+
+  unlockAndPlay() {
+    this.resume();
+    if (this.startupAudio) {
+      this.startupAudio.muted = false;
+      this.startupAudio.volume = 1.0;
+      if (this.startupAudio.paused) {
+        return this.startupAudio.play().then(() => {
+          this.speechUnlocked = true;
+          this.updateStatusTag(true);
+          this.removeUnlockListeners();
+          return true;
+        }).catch(() => false);
+      }
+    }
+    return Promise.resolve(true);
   }
 
   playStartupSpeech() {
     if (!this.enabled) return Promise.resolve(false);
     this.resume();
+    if (!this.startupAudio) {
+      this.startupAudio = document.getElementById('cyber-startup-audio') || new Audio('assets/startup-speech.mp3');
+    }
     if (this.startupAudio) {
       this.startupAudio.currentTime = 0;
+      this.startupAudio.muted = false;
       this.startupAudio.volume = 1.0;
       return this.startupAudio.play().then(() => {
         this.speechUnlocked = true;
+        this.updateStatusTag(true);
+        this.removeUnlockListeners();
         return true;
       }).catch(err => {
         console.warn("Autoplay deferred awaiting interaction:", err);
+        this.updateStatusTag(false);
         this.attachUnlockListeners();
         return false;
       });
@@ -133,7 +211,7 @@ class CyberAudio {
   }
 
   isSpeechActive() {
-    return this.startupAudio && !this.startupAudio.paused && !this.startupAudio.ended && this.startupAudio.currentTime > 0;
+    return Boolean(this.startupAudio && !this.startupAudio.paused && !this.startupAudio.ended);
   }
 
   toggle() {
