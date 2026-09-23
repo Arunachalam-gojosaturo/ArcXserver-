@@ -21,19 +21,50 @@
   <!-- Background Matrix Rain Canvas -->
   <canvas id="matrix-canvas"></canvas>
 
-  <!-- Preloaded Neural Speech Audio Element -->
-  <audio id="cyber-startup-audio" src="assets/startup-speech.mp3" preload="auto" playsinline webkit-playsinline></audio>
+  <!-- Preloaded Neural Speech Audio Element with Autoplay -->
+  <audio id="cyber-startup-audio" src="assets/startup-speech.mp3" autoplay preload="auto" playsinline webkit-playsinline></audio>
 
   <!-- =========================================================================
-       CINEMATIC HACKER BOOT & NEURAL VOICE TAKEOVER OVERLAY (> 19s SEQUENCE)
+       CINEMATIC HACKER BOOT & TONY STARK NEURAL TAKEOVER OVERLAY (> 19s SEQUENCE)
        ========================================================================= -->
   <div id="boot-overlay">
+    <!-- Tony Stark Arc Reactor HUD Hero Activator (Seamless auto-launch or 1-touch Jarvis engage) -->
+    <div id="stark-activator" class="stark-activator-overlay">
+      <div class="stark-reactor-hero">
+        <div class="reactor-ring reactor-ring-outer"></div>
+        <div class="reactor-ring reactor-ring-mid"></div>
+        <div class="reactor-ring reactor-ring-inner">
+          <div class="reactor-core-plasma"></div>
+          <div class="reactor-core-symbol">⚡</div>
+        </div>
+        <div class="reactor-hud-crosshairs">
+          <div class="crosshair-ch ch-top"></div>
+          <div class="crosshair-ch ch-bottom"></div>
+          <div class="crosshair-ch ch-left"></div>
+          <div class="crosshair-ch ch-right"></div>
+        </div>
+      </div>
+      <div class="stark-activator-banner">
+        <div class="stark-hero-title">⚡ ARCXOS // MARK-85 JARVIS CORE ⚡</div>
+        <div class="stark-hero-sub">OPERATOR: ARUNACHALAM M. // 48kHz NEURAL VOICE LINK</div>
+        <div class="stark-action-prompt">
+          <span class="stark-prompt-pulse">⚡ TAP SCREEN ANYWHERE TO ENGAGE ⚡</span>
+        </div>
+        <div class="stark-telemetry-strip">
+          <span>[ ARC-REACTOR: 3.20 GW ]</span>
+          <span>[ HYPRLAND: 144Hz ]</span>
+          <span>[ LUNA-AI: READY ]</span>
+          <span>[ UID=0: ROOT ]</span>
+        </div>
+      </div>
+    </div>
+
     <div class="boot-header">
       <div class="boot-brand">
         <span class="brand-glitch" data-text="⚡ ARCXOS_KERNEL_v6.10.9-arch1 // HARDENED INTERCEPT">⚡ ARCXOS_KERNEL_v6.10.9-arch1 // HARDENED INTERCEPT</span>
       </div>
       <div class="boot-header-actions">
-        <span id="boot-audio-status" class="boot-audio-status-tag" role="button" tabindex="0" onclick="if(window.cyberAudio)window.cyberAudio.unlockAndPlay()" title="Click to sync Luna neural speech audio">🔊 AUDIO: AUTO-ENGAGED</span>
+        <span id="boot-audio-status" class="boot-audio-status-tag">⚡ MARK-85 // 48kHz AUDIO: ACTIVE</span>
         <span class="boot-speed-tag">⚡ FAST STREAM 60FPS</span>
         <span class="boot-protocol-tag">PROTO: LUNA-AI // UID=0</span>
         <button id="skip-boot-btn" class="boot-skip-btn" title="Skip directly to presentation console (or press ESC)">
@@ -62,6 +93,33 @@
 
         <!-- Cyber HUD Sidebar (Voice Visualizer + Hex Disassembly Stream + Telemetry) -->
         <div class="boot-hud-sidebar">
+          <!-- Tony Stark Arc Reactor HUD Mini Core Widget -->
+          <div class="boot-widget boot-reactor-widget">
+            <div class="widget-header">
+              <span class="stark-dot">●</span>
+              <span>ARC REACTOR // MARK-85</span>
+              <span id="stark-reactor-power" class="widget-tag widget-tag-accent">3.20 GW</span>
+            </div>
+            <div class="stark-mini-reactor-display">
+              <div class="mini-reactor-ring mini-ring-1"></div>
+              <div class="mini-reactor-ring mini-ring-2"></div>
+              <div class="mini-reactor-core" id="mini-reactor-core">
+                <div class="mini-core-pulse"></div>
+                <span class="mini-core-glyph">⚡</span>
+              </div>
+            </div>
+            <div class="reactor-metrics">
+              <div class="reactor-metric-row">
+                <span>CORE INTEGRITY</span>
+                <span class="metric-val">100% NOMINAL</span>
+              </div>
+              <div class="reactor-metric-row">
+                <span>REPULSOR SYNC</span>
+                <span class="metric-val" id="repulsor-sync-val">ONLINE 48kHz</span>
+              </div>
+            </div>
+          </div>
+
           <!-- Audio Spectrum Equalizer Widget -->
           <div class="boot-widget boot-visualizer-widget">
             <div class="widget-header">

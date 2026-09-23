@@ -33,20 +33,11 @@ class BootSequence {
     this.animFrameId = null;
     this.logTimeouts = [];
     this.lastSoundTick = 0;
+    this.activator = null;
   }
 
   init() {
-    // Direct tap/click anywhere on boot overlay unlocks and plays audio
-    if (this.bootOverlay) {
-      const unlockAudio = () => {
-        if (window.cyberAudio) {
-          window.cyberAudio.unlockAndPlay();
-        }
-      };
-      this.bootOverlay.addEventListener('click', unlockAudio);
-      this.bootOverlay.addEventListener('touchstart', unlockAudio, { passive: true });
-      this.bootOverlay.addEventListener('pointerdown', unlockAudio, { passive: true });
-    }
+    this.activator = document.getElementById('stark-activator');
 
     // Skip / Override button
     if (this.skipBtn) {
@@ -64,7 +55,63 @@ class BootSequence {
     });
 
     this.setupVisualizer();
-    this.start();
+
+    // Check if audio is already unlocked and playing
+    if (window.cyberAudio && window.cyberAudio.speechUnlocked) {
+      if (this.activator) this.activator.classList.add('activated');
+      this.start();
+      return;
+    }
+
+    // Attempt handless unmuted startup immediately
+    if (window.cyberAudio) {
+      window.cyberAudio.playStartupSpeech().then((started) => {
+        if (started) {
+          if (this.activator) this.activator.classList.add('activated');
+          this.start();
+        } else {
+          this.waitForEngagement();
+        }
+      }).catch(() => {
+        this.waitForEngagement();
+      });
+    } else {
+      this.start();
+    }
+  }
+
+  waitForEngagement() {
+    let engaged = false;
+    const engage = () => {
+      if (engaged) return;
+      engaged = true;
+
+      if (this.activator) this.activator.classList.add('activated');
+      if (window.cyberAudio) {
+        window.cyberAudio.unlockAndPlay();
+      }
+      this.start();
+
+      const events = ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'];
+      events.forEach(evt => {
+        window.removeEventListener(evt, engage, { capture: true });
+        document.removeEventListener(evt, engage, { capture: true });
+      });
+    };
+
+    const events = ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'];
+    events.forEach(evt => {
+      window.addEventListener(evt, engage, { capture: true, once: true });
+      document.addEventListener(evt, engage, { capture: true, once: true });
+    });
+
+    if (this.activator) {
+      this.activator.addEventListener('click', engage, { once: true });
+      this.activator.addEventListener('touchstart', engage, { once: true, passive: true });
+    }
+    if (this.bootOverlay) {
+      this.bootOverlay.addEventListener('click', engage, { once: true });
+    }
   }
 
   setupVisualizer() {
@@ -537,6 +584,19 @@ class BootSequence {
         bar.style.height = `${heightPct}%`;
       });
     }
+
+    // Pulse Tony Stark Mini Arc Reactor in real-time sync with neural voice
+    const miniCore = document.getElementById('mini-reactor-core');
+    if (miniCore) {
+      if (isPlaying) {
+        const pulseScale = 1 + (Math.sin(Date.now() / 80) * 0.12) + (Math.random() * 0.08);
+        miniCore.style.transform = `scale(${pulseScale.toFixed(3)})`;
+        miniCore.style.boxShadow = `0 0 ${20 + Math.random() * 15}px rgba(0, 240, 255, 0.95)`;
+      } else {
+        miniCore.style.transform = 'scale(1)';
+        miniCore.style.boxShadow = '0 0 15px rgba(0, 240, 255, 0.5)';
+      }
+    }
   }
 
   triggerTakeoverAlert() {
@@ -550,6 +610,17 @@ class BootSequence {
     if (document.body) {
       document.body.classList.add('screen-alarm-shake');
       setTimeout(() => document.body.classList.remove('screen-alarm-shake'), 1200);
+    }
+
+    // Overload Arc Reactor Core in HUD
+    const reactorPower = document.getElementById('stark-reactor-power');
+    if (reactorPower) {
+      reactorPower.textContent = 'OVERLOAD 100%';
+      reactorPower.className = 'widget-tag widget-tag-danger';
+    }
+    const miniCore = document.getElementById('mini-reactor-core');
+    if (miniCore) {
+      miniCore.classList.add('reactor-overload');
     }
 
     if (window.cyberAudio) {

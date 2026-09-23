@@ -57,7 +57,7 @@ class CyberAudio {
   /**
    * Automatically launches audio when site launches.
    * If browser autoplay restrictions block immediate unmuted playback,
-   * an invisible, transparent listener unlocks it upon user touch/click/key
+   * a transparent listener unlocks it on ANY user touch/click/key/scroll
    * without requiring any manual prompt button in the UI.
    */
   setupAutoPlay() {
@@ -74,11 +74,13 @@ class CyberAudio {
         if (playPromise !== undefined) {
           playPromise.then(() => {
             this.speechUnlocked = true;
+            this.playRepulsorBlast();
             this.updateStatusTag(true);
             this.removeUnlockListeners();
+            const activator = document.getElementById('stark-activator');
+            if (activator) activator.classList.add('activated');
           }).catch((err) => {
             // Autoplay blocked by browser policy without gesture;
-            // Listen for any user gesture to unlock immediately.
             this.updateStatusTag(false);
             this.attachUnlockListeners();
           });
@@ -86,10 +88,13 @@ class CyberAudio {
       }
     };
 
-    // Attempt immediately when script executes and on DOM ready / window load
+    // Attempt immediately when script executes and across several lifecycle events
     tryPlay();
+    setTimeout(tryPlay, 50);
+    setTimeout(tryPlay, 150);
+    requestAnimationFrame(tryPlay);
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      setTimeout(tryPlay, 50);
+      setTimeout(tryPlay, 80);
     } else {
       window.addEventListener('DOMContentLoaded', tryPlay, { once: true });
       window.addEventListener('load', tryPlay, { once: true });
@@ -100,6 +105,7 @@ class CyberAudio {
     if (this._unlockHandler) return;
     this._unlockHandler = () => {
       this.resume();
+      this.playRepulsorBlast();
       if (this.startupAudio) {
         this.startupAudio.muted = false;
         this.startupAudio.volume = 1.0;
@@ -109,13 +115,15 @@ class CyberAudio {
             this.speechUnlocked = true;
             this.updateStatusTag(true);
             this.removeUnlockListeners();
+            const activator = document.getElementById('stark-activator');
+            if (activator) activator.classList.add('activated');
           }).catch(() => {});
         }
       }
     };
 
     const opts = { capture: true, passive: true };
-    ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'].forEach(evt => {
+    ['click', 'touchstart', 'touchend', 'pointerdown', 'pointerup', 'keydown', 'wheel', 'scroll'].forEach(evt => {
       window.addEventListener(evt, this._unlockHandler, opts);
       document.addEventListener(evt, this._unlockHandler, opts);
     });
@@ -126,16 +134,17 @@ class CyberAudio {
       overlay.addEventListener('touchstart', this._unlockHandler, opts);
     }
 
-    const tag = document.getElementById('boot-audio-status');
-    if (tag) {
-      tag.addEventListener('click', this._unlockHandler, opts);
+    const activator = document.getElementById('stark-activator');
+    if (activator) {
+      activator.addEventListener('click', this._unlockHandler, opts);
+      activator.addEventListener('touchstart', this._unlockHandler, opts);
     }
   }
 
   removeUnlockListeners() {
     if (this._unlockHandler) {
       const opts = { capture: true, passive: true };
-      ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'].forEach(evt => {
+      ['click', 'touchstart', 'touchend', 'pointerdown', 'pointerup', 'keydown', 'wheel', 'scroll'].forEach(evt => {
         window.removeEventListener(evt, this._unlockHandler, opts);
         document.removeEventListener(evt, this._unlockHandler, opts);
       });
@@ -152,17 +161,26 @@ class CyberAudio {
     const tag = document.getElementById('boot-audio-status');
     if (tag) {
       if (active) {
-        tag.textContent = '🔊 LUNA-AI VOICE: LIVE 48kHz';
+        tag.textContent = '⚡ LUNA-AI // 48kHz STEREO ACTIVE';
         tag.classList.add('audio-active');
       } else {
-        tag.textContent = '🔊 AUDIO: TAP ANYWHERE TO SYNC';
+        tag.textContent = '⚡ MARK-85 // NEURAL LINK STANDBY';
         tag.classList.remove('audio-active');
       }
+    }
+    const syncVal = document.getElementById('repulsor-sync-val');
+    if (syncVal) {
+      syncVal.textContent = active ? 'ONLINE 48kHz' : 'STANDBY';
+      syncVal.style.color = active ? 'var(--neon-green)' : 'var(--neon-amber)';
     }
   }
 
   unlockAndPlay() {
     this.resume();
+    this.playRepulsorBlast();
+    const activator = document.getElementById('stark-activator');
+    if (activator) activator.classList.add('activated');
+
     if (this.startupAudio) {
       this.startupAudio.muted = false;
       this.startupAudio.volume = 1.0;
@@ -173,6 +191,11 @@ class CyberAudio {
           this.removeUnlockListeners();
           return true;
         }).catch(() => false);
+      } else {
+        this.speechUnlocked = true;
+        this.updateStatusTag(true);
+        this.removeUnlockListeners();
+        return Promise.resolve(true);
       }
     }
     return Promise.resolve(true);
@@ -190,17 +213,83 @@ class CyberAudio {
       this.startupAudio.volume = 1.0;
       return this.startupAudio.play().then(() => {
         this.speechUnlocked = true;
+        this.playRepulsorBlast();
         this.updateStatusTag(true);
         this.removeUnlockListeners();
+        const activator = document.getElementById('stark-activator');
+        if (activator) activator.classList.add('activated');
         return true;
       }).catch(err => {
-        console.warn("Autoplay deferred awaiting interaction:", err);
+        console.warn("Autoplay deferred awaiting gesture:", err);
         this.updateStatusTag(false);
         this.attachUnlockListeners();
         return false;
       });
     }
     return Promise.resolve(false);
+  }
+
+  // Authentic Iron Man / Tony Stark Repulsor Power-up & Plasma Pulse Sound
+  playRepulsorBlast() {
+    if (!this.enabled || !this.ctx) return;
+    try {
+      this.resume();
+      const now = this.ctx.currentTime;
+
+      // 1. Ascending repulsor charge sweep (80Hz -> 1400Hz)
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const filter = this.ctx.createBiquadFilter();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(80, now);
+      osc.frequency.exponentialRampToValueAtTime(1400, now + 0.55);
+
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(200, now);
+      filter.frequency.exponentialRampToValueAtTime(2200, now + 0.55);
+      filter.Q.setValueAtTime(5.0, now);
+
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.linearRampToValueAtTime(0.2, now + 0.35);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.6);
+
+      // 2. Sub-bass reactor pulse
+      const sub = this.ctx.createOscillator();
+      const subGain = this.ctx.createGain();
+      sub.type = 'sine';
+      sub.frequency.setValueAtTime(55, now);
+      sub.frequency.exponentialRampToValueAtTime(32, now + 0.5);
+      subGain.gain.setValueAtTime(0.25, now);
+      subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+
+      sub.connect(subGain);
+      subGain.connect(this.ctx.destination);
+      sub.start(now);
+      sub.stop(now + 0.5);
+
+      // 3. High-tech harmonic discharge ping
+      const ping = this.ctx.createOscillator();
+      const pingGain = this.ctx.createGain();
+      ping.type = 'sine';
+      ping.frequency.setValueAtTime(1760, now + 0.42);
+      ping.frequency.exponentialRampToValueAtTime(880, now + 0.68);
+      pingGain.gain.setValueAtTime(0.001, now + 0.42);
+      pingGain.gain.linearRampToValueAtTime(0.12, now + 0.45);
+      pingGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+
+      ping.connect(pingGain);
+      pingGain.connect(this.ctx.destination);
+      ping.start(now + 0.42);
+      ping.stop(now + 0.7);
+    } catch (e) {}
   }
 
   stopStartupSpeech() {
