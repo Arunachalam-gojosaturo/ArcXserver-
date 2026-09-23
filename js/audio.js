@@ -1,13 +1,16 @@
 /**
- * Cyber Synthesizer Audio Engine (Web Audio API)
- * Generates synthetic hacker sounds: terminal keystrokes, alarm sirens,
- * bass impact drops, glitch noise, and sci-fi telemetry beeps.
+ * Cyber Synthesizer Audio Engine (Web Audio API & HTML5 Audio)
+ * Provides automatic audio launch, synthetic hacker keystrokes, alarm sirens,
+ * bass impact drops, glitch static, radar pings, and exploit chimes.
  */
 class CyberAudio {
   constructor() {
     this.ctx = null;
     this.enabled = true;
     this.initialized = false;
+    this.speechUnlocked = false;
+
+    // Primary and fallback audio assets
     this.startupAudio = new Audio('assets/startup-speech.mp3');
     this.startupAudio.preload = 'auto';
     this.startupAudio.onerror = () => {
@@ -16,25 +19,91 @@ class CyberAudio {
         this.startupAudio.load();
       }
     };
+
+    // Auto-initialize audio on load
+    this.setupAutoPlay();
   }
 
   init() {
     if (this.initialized && this.ctx) return;
     try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (AudioContext) {
-        this.ctx = new AudioContext();
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        this.ctx = new AudioCtx();
         this.initialized = true;
       }
     } catch (e) {
-      console.warn("AudioContext not supported or blocked", e);
+      console.warn("AudioContext initialization note:", e);
     }
   }
 
   resume() {
     this.init();
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => {});
+    }
+  }
+
+  /**
+   * Automatically launches audio when site launches.
+   * If browser autoplay restrictions block immediate unmuted playback,
+   * an invisible, transparent one-time listener unlocks it upon any user touch/click/scroll
+   * without requiring any manual prompt button in the UI.
+   */
+  setupAutoPlay() {
+    const tryPlay = () => {
+      if (!this.enabled || this.speechUnlocked) return;
+      this.resume();
+      if (this.startupAudio) {
+        this.startupAudio.volume = 1.0;
+        const playPromise = this.startupAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            this.speechUnlocked = true;
+            this.removeUnlockListeners();
+          }).catch(() => {
+            // Autoplay blocked by browser policy without gesture;
+            // Transparently listen for any interaction to unlock immediately.
+            this.attachUnlockListeners();
+          });
+        }
+      }
+    };
+
+    // Attempt immediately when script executes and on DOM ready / window load
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(tryPlay, 50);
+    } else {
+      window.addEventListener('DOMContentLoaded', tryPlay, { once: true });
+      window.addEventListener('load', tryPlay, { once: true });
+    }
+  }
+
+  attachUnlockListeners() {
+    if (this._unlockHandler) return;
+    this._unlockHandler = () => {
+      this.resume();
+      if (this.startupAudio && this.startupAudio.paused) {
+        this.startupAudio.play().then(() => {
+          this.speechUnlocked = true;
+        }).catch(() => {});
+      }
+      this.removeUnlockListeners();
+    };
+
+    const opts = { capture: true, passive: true };
+    ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown', 'scroll', 'wheel'].forEach(evt => {
+      window.addEventListener(evt, this._unlockHandler, opts);
+    });
+  }
+
+  removeUnlockListeners() {
+    if (this._unlockHandler) {
+      const opts = { capture: true, passive: true };
+      ['pointerdown', 'touchstart', 'touchend', 'click', 'keydown', 'scroll', 'wheel'].forEach(evt => {
+        window.removeEventListener(evt, this._unlockHandler, opts);
+      });
+      this._unlockHandler = null;
     }
   }
 
@@ -44,8 +113,12 @@ class CyberAudio {
     if (this.startupAudio) {
       this.startupAudio.currentTime = 0;
       this.startupAudio.volume = 1.0;
-      return this.startupAudio.play().then(() => true).catch(err => {
-        console.warn("Startup speech autoplay deferred awaiting user gesture:", err);
+      return this.startupAudio.play().then(() => {
+        this.speechUnlocked = true;
+        return true;
+      }).catch(err => {
+        console.warn("Autoplay deferred awaiting interaction:", err);
+        this.attachUnlockListeners();
         return false;
       });
     }
@@ -79,10 +152,11 @@ class CyberAudio {
     return this.enabled;
   }
 
-  // Realistic mechanical terminal keystroke / data tick
+  // Realistic mechanical keystroke tick
   playKeyClick() {
     if (!this.enabled || !this.ctx) return;
     try {
+      this.resume();
       const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -91,7 +165,7 @@ class CyberAudio {
       osc.frequency.setValueAtTime(1400 + Math.random() * 800, now);
       osc.frequency.exponentialRampToValueAtTime(300, now + 0.02);
 
-      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.setValueAtTime(0.035, now);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.02);
 
       osc.connect(gain);
@@ -102,20 +176,45 @@ class CyberAudio {
     } catch (e) {}
   }
 
-  // Two-tone warning cyber siren
-  playAlarm(duration = 1.2) {
+  // Ultra-fast subtle click for rapid terminal streaming
+  playFastTick() {
     if (!this.enabled || !this.ctx) return;
     try {
       const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(880, now);
-      osc.frequency.linearRampToValueAtTime(440, now + duration * 0.5);
-      osc.frequency.linearRampToValueAtTime(880, now + duration);
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(2200 + Math.random() * 1200, now);
+      osc.frequency.exponentialRampToValueAtTime(600, now + 0.008);
 
-      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.setValueAtTime(0.015, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.009);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.01);
+    } catch (e) {}
+  }
+
+  // Two-tone warning cyber siren
+  playAlarm(duration = 1.4) {
+    if (!this.enabled || !this.ctx) return;
+    try {
+      this.resume();
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(920, now);
+      osc.frequency.linearRampToValueAtTime(460, now + duration * 0.4);
+      osc.frequency.linearRampToValueAtTime(920, now + duration * 0.8);
+      osc.frequency.linearRampToValueAtTime(460, now + duration);
+
+      gain.gain.setValueAtTime(0.09, now);
       gain.gain.linearRampToValueAtTime(0.12, now + duration * 0.5);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
@@ -127,34 +226,36 @@ class CyberAudio {
     } catch (e) {}
   }
 
-  // Deep sub-bass impact drop for TAKE OVER event
+  // Deep sub-bass impact drop for TAKEOVER event
   playBassDrop() {
     if (!this.enabled || !this.ctx) return;
     try {
+      this.resume();
       const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(150, now);
-      osc.frequency.exponentialRampToValueAtTime(32, now + 0.8);
+      osc.frequency.setValueAtTime(160, now);
+      osc.frequency.exponentialRampToValueAtTime(30, now + 0.9);
 
-      gain.gain.setValueAtTime(0.3, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
       osc.start(now);
-      osc.stop(now + 0.9);
+      osc.stop(now + 1.0);
     } catch (e) {}
   }
 
   // Glitch static noise burst
-  playGlitch(duration = 0.15) {
+  playGlitch(duration = 0.12) {
     if (!this.enabled || !this.ctx) return;
     try {
-      const bufferSize = this.ctx.sampleRate * duration;
+      this.resume();
+      const bufferSize = Math.floor(this.ctx.sampleRate * duration);
       const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
@@ -166,11 +267,11 @@ class CyberAudio {
 
       const filter = this.ctx.createBiquadFilter();
       filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(1200, this.ctx.currentTime);
+      filter.frequency.setValueAtTime(1400, this.ctx.currentTime);
       filter.Q.setValueAtTime(3, this.ctx.currentTime);
 
       const gain = this.ctx.createGain();
-      gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+      gain.gain.setValueAtTime(0.07, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
 
       noise.connect(filter);
@@ -181,10 +282,11 @@ class CyberAudio {
     } catch (e) {}
   }
 
-  // High-tech sci-fi ping / prompt chime
+  // High-tech sci-fi ping / radar chime
   playPing(freq = 980) {
     if (!this.enabled || !this.ctx) return;
     try {
+      this.resume();
       const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -202,27 +304,37 @@ class CyberAudio {
     } catch (e) {}
   }
 
-  // Successful auth / escalate sound
+  // Successful auth / privilege escalation chord
   playSuccess() {
     if (!this.enabled || !this.ctx) return;
     try {
-      const notes = [440, 554.37, 659.25, 880];
+      this.resume();
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
       const now = this.ctx.currentTime;
       notes.forEach((freq, idx) => {
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+        osc.frequency.setValueAtTime(freq, now + idx * 0.05);
 
-        gain.gain.setValueAtTime(0.05, now + idx * 0.06);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.06 + 0.12);
+        gain.gain.setValueAtTime(0.045, now + idx * 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.05 + 0.15);
 
         osc.connect(gain);
         gain.connect(this.ctx.destination);
 
-        osc.start(now + idx * 0.06);
-        osc.stop(now + idx * 0.06 + 0.13);
+        osc.start(now + idx * 0.05);
+        osc.stop(now + idx * 0.05 + 0.16);
       });
+    } catch (e) {}
+  }
+
+  // Explosive cyber attack payload delivery sound
+  playExploitSound() {
+    if (!this.enabled || !this.ctx) return;
+    try {
+      this.playGlitch(0.18);
+      setTimeout(() => this.playBassDrop(), 60);
     } catch (e) {}
   }
 }

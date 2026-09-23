@@ -17,11 +17,22 @@ class CyberTerminal {
       luna: () => this.cmdLuna(),
       target: () => this.cmdTarget(),
       scan: () => this.cmdScan(),
+      attack: (args) => this.cmdAttack(args),
+      hack: (args) => this.cmdAttack(args),
       neofetch: () => this.cmdNeofetch(),
+      cve: () => this.cmdCVE(),
+      tools: () => this.cmdTools(),
+      arsenal: () => this.cmdTools(),
+      skills: () => this.cmdSkills(),
+      socials: () => this.cmdSocials(),
+      contact: () => this.cmdSocials(),
       exploit: () => this.cmdExploit(),
       matrix: () => this.cmdMatrix(),
       disclaimer: () => this.cmdDisclaimer(),
       google: () => this.cmdGoogle(),
+      sudo: (args) => this.cmdSudo(args),
+      cat: (args) => this.cmdCat(args),
+      history: () => this.cmdHistory(),
       boot: () => this.cmdReplay(),
       replay: () => this.cmdReplay(),
       clear: () => this.cmdClear()
@@ -146,16 +157,126 @@ class CyberTerminal {
     <tr><td class="term-hl">luna</td><td>Luna AI modular cyberpunk desktop assistant specs (Arch AUR)</td></tr>
     <tr><td class="term-hl">target</td><td>Interrogate live hardware & forensic telemetry of this device</td></tr>
     <tr><td class="term-hl">scan</td><td>Execute real-time socket and vulnerability audit</td></tr>
+    <tr><td class="term-hl">attack [ip]</td><td>Simulate full interactive cyber attack sequence against target</td></tr>
     <tr><td class="term-hl">neofetch</td><td>Display Arch Linux ASCII logo and system performance stats</td></tr>
+    <tr><td class="term-hl">cve</td><td>View zero-day vulnerability disclosures audited by Arunachalam</td></tr>
+    <tr><td class="term-hl">tools</td><td>BlackArch offensive security toolset inventory</td></tr>
+    <tr><td class="term-hl">skills</td><td>Arunachalam's engineering discipline & mastery matrix</td></tr>
+    <tr><td class="term-hl">socials</td><td>GitHub, Google search, and security researcher channels</td></tr>
     <tr><td class="term-hl">exploit</td><td>Inspect active memory payload and privilege elevation logs</td></tr>
     <tr><td class="term-hl">google</td><td>Search "Arunachalam archlinux" directly on Google</td></tr>
     <tr><td class="term-hl">matrix</td><td>Toggle holographic matrix code stream</td></tr>
-    <tr><td class="term-hl">replay</td><td>Rerun the 21-second neural voice device takeover sequence</td></tr>
+    <tr><td class="term-hl">replay</td><td>Rerun the high-speed hacker device takeover sequence</td></tr>
+    <tr><td class="term-hl">cat [file]</td><td>Read simulated system files (/etc/shadow, /etc/passwd)</td></tr>
     <tr><td class="term-hl">disclaimer</td><td>Display educational & ethical security presentation notice</td></tr>
     <tr><td class="term-hl">clear</td><td>Clear terminal screen</td></tr>
   </table>
 </div>`;
     this.printLine(helpText);
+  }
+
+  cmdAttack(args) {
+    const target = (args && args[0]) || (window.telemetry && window.telemetry.data ? window.telemetry.data.ip : '192.168.1.104');
+    this.printLine(`<span class="term-danger font-bold">[*] INITIALIZING OFFENSIVE PENETRATION SEQUENCE AGAINST: ${this.escapeHtml(target)}</span>`);
+
+    const steps = [
+      { delay: 150, text: `[1/5] ARP/ICMP Handshake established with target node ${this.escapeHtml(target)}...`, type: 'term-muted' },
+      { delay: 450, text: '[2/5] Port Interrogation: Port 22 (SSH), Port 80 (HTTP), Port 443 (HTTPS), Port 4444 (C2) [OPEN]', type: 'term-accent' },
+      { delay: 850, text: '[3/5] Weaponizing payload: CVE-ARCXOS-2026 Ring-0 Buffer Alignment Spray...', type: 'term-warn' },
+      { delay: 1300, text: '[4/5] Injecting shellcode into memory register 0x7FFF004B2A... ASLR Defeated', type: 'term-warn' },
+      { delay: 1800, text: '<span class="term-danger font-bold">[5/5] ⚠️ ROOT PRIVILEGE HARVESTED: UID=0 (root) // SHELL COMPROMISED BY ARUNACHALAM!</span>', type: 'term-danger' }
+    ];
+
+    steps.forEach(s => {
+      setTimeout(() => {
+        this.printLine(s.text, s.type);
+        if (window.cyberAudio) {
+          if (s.delay > 1500) window.cyberAudio.playExploitSound();
+          else window.cyberAudio.playPing(600 + s.delay / 2);
+        }
+        this.scrollToBottom();
+      }, s.delay);
+    });
+  }
+
+  cmdCVE() {
+    const cve = `
+<div class="term-block term-box-danger">
+  <div class="term-danger font-bold">>>> AUDITED ZERO-DAY VULNERABILITY DISCLOSURES</div>
+  <table class="term-table">
+    <tr><td class="term-danger font-bold">CVE-ARCXOS-2026-HEAP</td><td>Ring-0 Kernel Heap Buffer Alignment & Arbitrary Write Primitive [CRITICAL 9.8]</td></tr>
+    <tr><td class="term-warn font-bold">CVE-2024-WAYLAND-HOOK</td><td>Wayland Hyprland Compositor Shared Memory Injection [HIGH 8.2]</td></tr>
+    <tr><td class="term-accent font-bold">CVE-2024-LUNA-NEURAL</td><td>Neural Audio Intercept & Autonomous Bash Triage Bypass [ETHICAL AUDIT]</td></tr>
+    <tr><td class="term-muted font-bold">CVE-2023-NETWATCH-SNIFF</td><td>Zero-Latency Kernel Socket BPF Filter Intercept [RESOLVED]</td></tr>
+  </table>
+  <div class="term-muted mt-1">Research Lead: Arunachalam M. (@gojosaturo) // Arch Linux Security Lab</div>
+</div>`;
+    this.printLine(cve);
+  }
+
+  cmdTools() {
+    const tools = `
+<div class="term-block term-box">
+  <div class="term-accent font-bold">>>> ARCXOS & BLACKARCH ARSENAL INVENTORY</div>
+  <div>• <span class="term-hl">RECON & SCANNING:</span> Nmap 7.95, Masscan, Amass, Wireshark, Netwatch (Custom)</div>
+  <div>• <span class="term-hl">EXPLOITATION:</span> Metasploit Framework 6.4, Cyberkit (Custom), Searchsploit, Pwntools</div>
+  <div>• <span class="term-hl">REVERSE ENGINEERING:</span> Radare2 5.9, Ghidra, GDB-GEF, IDA Pro Freeware</div>
+  <div>• <span class="term-hl">PASSWORD AUDITING:</span> Hashcat, John the Ripper, Hydra, CeWL</div>
+  <div>• <span class="term-hl">DESKTOP & KERNEL:</span> Pure Arch Linux x86_64, Hyprland Compositor, Luna AI (AUR: luna-llm)</div>
+</div>`;
+    this.printLine(tools);
+  }
+
+  cmdSkills() {
+    const s = `
+<div class="term-block term-box">
+  <div class="term-accent font-bold">>>> OPERATOR ARUNACHALAM M. // CORE DISCIPLINES</div>
+  <div>[1] <span class="term-hl">ARCH LINUX & KERNEL PACKAGING:</span> 7+ Years maintaining AUR packages, compiling hardened kernels, Hyprland dotfiles.</div>
+  <div>[2] <span class="term-hl">OFFENSIVE PENETRATION TESTING:</span> Binary exploitation, heap buffer overflows, ROP chain crafting, web security.</div>
+  <div>[3] <span class="term-hl">AUTONOMOUS AI INTEGRATION:</span> Creator of Luna AI (luna-llm on Arch AUR) for terminal command coprocessing.</div>
+  <div>[4] <span class="term-hl">LOW-LEVEL SYSTEMS:</span> C, Rust, Bash, x86_64 Assembly, Socket Programming, Linux Namespaces.</div>
+</div>`;
+    this.printLine(s);
+  }
+
+  cmdSocials() {
+    const soc = `
+<div class="term-block term-box">
+  <div class="term-accent font-bold">>>> OPERATOR CONNECTIVITY & REPOSITORIES</div>
+  <div>• <span class="term-hl">GITHUB:</span> <a href="https://github.com/Arunachalam-gojosaturo" target="_blank" rel="noopener noreferrer" class="term-link">github.com/Arunachalam-gojosaturo</a></div>
+  <div>• <span class="term-hl">GOOGLE:</span> <a href="https://www.google.com/search?q=Arunachalam+archlinux" target="_blank" rel="noopener noreferrer" class="term-link">Search "Arunachalam archlinux"</a></div>
+  <div>• <span class="term-hl">PROJECT:</span> ArcXOS Linux &amp; Luna AI Assistant</div>
+</div>`;
+    this.printLine(soc);
+  }
+
+  cmdSudo(args) {
+    this.printLine('<span class="term-accent">User \'arunachalam\' already holds UID=0 (ROOT) privileges. Sudo is redundant.</span>');
+    if (args && args.length > 0) {
+      this.execute(args.join(' '));
+    }
+  }
+
+  cmdCat(args) {
+    const file = args && args[0] ? args[0].toLowerCase() : '';
+    if (file === '/etc/shadow' || file === 'shadow') {
+      this.printLine('<div class="term-block term-danger">root:$6$arcxos$ArunachalamKernelMasterHash2026:19620:0:99999:7:::<br>daemon:*:19620:0:99999:7:::<br>arunachalam:$6$arcxos$GojoSatoruLimitlessVoidHash:19620:0:99999:7:::</div>');
+    } else if (file === '/etc/passwd' || file === 'passwd') {
+      this.printLine('<div class="term-block term-muted">root:x:0:0:root:/root:/bin/zsh<br>arunachalam:x:0:0:Arunachalam M. (Arch Linux Specialist):/home/arunachalam:/bin/zsh<br>luna:x:999:999:Luna AI Daemon:/var/lib/luna:/sbin/nologin</div>');
+    } else if (file === '/proc/version' || file === 'version') {
+      this.printLine('Linux version 6.10.9-arch1-arcxos (gcc 14.2.1) #1 SMP PREEMPT_DYNAMIC');
+    } else {
+      this.printLine(`cat: ${this.escapeHtml(file || 'file')}: No such file or permission granted by operator.`);
+    }
+  }
+
+  cmdHistory() {
+    if (this.history.length === 0) {
+      this.printLine('Command history is currently empty.');
+      return;
+    }
+    const list = this.history.map((h, i) => `<div>${(i + 1).toString().padStart(3, ' ')}  ${this.escapeHtml(h)}</div>`).join('');
+    this.printLine(`<div class="term-block term-muted">${list}</div>`);
   }
 
   cmdWhoami() {
@@ -290,10 +411,10 @@ class CyberTerminal {
   }
 
   cmdReplay() {
-    this.printLine('<span class="term-danger font-bold">[*] RE-INITIALIZING 21-SECOND NEURAL VOICE TAKEOVER PROTOCOL...</span>');
+    this.printLine('<span class="term-danger font-bold">[*] RE-INITIALIZING FAST HACKER TAKEOVER PROTOCOL...</span>');
     setTimeout(() => {
       if (window.replayTakeover) window.replayTakeover();
-    }, 400);
+    }, 250);
   }
 
   escapeHtml(str) {

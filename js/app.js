@@ -111,17 +111,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Continuous Threat Telemetry Stream Ticker
+  // Sound feedback on cyber action buttons
+  document.querySelectorAll('.cta-btn-primary, .cta-btn-secondary, .hud-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (window.cyberAudio) window.cyberAudio.playKeyClick();
+    });
+  });
+
+  // Continuous Threat Telemetry Stream Ticker (High-speed 750ms stream)
   const streamTicker = document.getElementById('packet-stream-ticker');
   if (streamTicker) {
-    const protocols = ['TCP/SYN', 'TLS_AES_256', 'ARC_TUNNEL', 'SSH_PAYLOAD', 'DNS_QUERY', 'RAW_SOCKET'];
-    const nodes = ['192.168.1.1', '10.0.0.45', '172.16.4.22', 'node-c2.arcxos.net', 'target-host.local'];
+    const protocols = ['TCP/SYN', 'TLS_AES_256', 'ARC_TUNNEL', 'SSH_PAYLOAD', 'DNS_DOH', 'RAW_SOCKET', 'ROP_GADGET', 'CHA_CHA20', 'METASPLOIT', 'HYDRA_AUTH'];
+    const nodes = ['192.168.1.1', '10.0.0.45', '172.16.4.22', 'node-c2.arcxos.net', 'target-host.local', '10.66.66.1', '192.168.1.104'];
 
     setInterval(() => {
       const proto = protocols[Math.floor(Math.random() * protocols.length)];
       const node = nodes[Math.floor(Math.random() * nodes.length)];
       const bytes = Math.floor(Math.random() * 8192) + 64;
-      const status = Math.random() > 0.3 ? 'EXFILTRATED' : 'INTERCEPTED';
+      const status = Math.random() > 0.35 ? 'EXFILTRATED' : 'INTERCEPTED';
 
       const line = document.createElement('div');
       line.className = 'packet-line';
@@ -131,6 +138,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (streamTicker.children.length > 8) {
         streamTicker.removeChild(streamTicker.lastChild);
       }
-    }, 1400);
+    }, 750);
+  }
+
+  // Periodic voice stream sync for navbar badge
+  const voiceBadge = document.getElementById('hud-voice-indicator');
+  if (voiceBadge) {
+    setInterval(() => {
+      if (window.cyberAudio && window.cyberAudio.isSpeechActive()) {
+        voiceBadge.classList.remove('hidden');
+      } else {
+        voiceBadge.classList.add('hidden');
+      }
+    }, 300);
   }
 });

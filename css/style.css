@@ -106,6 +106,7 @@ html, body {
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   background: 
     radial-gradient(circle at center, rgba(5, 8, 12, 0.76) 0%, rgba(2, 4, 6, 0.94) 100%),
     url('../assets/hacker_cyber_hoodie.jpg') center/cover no-repeat;
@@ -115,7 +116,7 @@ html, body {
   justify-content: space-between;
   padding: 24px;
   font-family: var(--font-mono);
-  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s ease, background 0.6s ease;
+  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1), transform 0.55s ease, background 0.5s ease;
 }
 
 #boot-overlay.takeover-alert-active {
@@ -131,87 +132,63 @@ html, body {
   transform: scale(1.04);
 }
 
-/* Audio prompt banner for autoplay policy handling */
-.boot-audio-prompt {
-  position: absolute;
-  top: 64px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  width: 90%;
-  max-width: 680px;
-  animation: promptSlideDown 0.35s ease-out;
-}
-
-.boot-audio-prompt.hidden {
-  display: none;
-}
-
-@keyframes promptSlideDown {
-  from { opacity: 0; transform: translate(-50%, -15px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
-}
-
-.audio-prompt-content {
-  background: rgba(8, 14, 24, 0.96);
-  border: 1px solid var(--neon-cyan);
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.45);
-  border-radius: 6px;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  backdrop-filter: blur(10px);
-}
-
-.audio-prompt-icon {
-  font-size: 1.5rem;
-  animation: audioPromptPulse 1.2s infinite ease-in-out;
-}
-
-@keyframes audioPromptPulse {
-  0% { transform: scale(0.95); opacity: 0.8; }
-  50% { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.8; }
-}
-
-.audio-prompt-info {
-  flex: 1;
-}
-
-.audio-prompt-info strong {
-  display: block;
-  color: var(--neon-cyan);
-  font-size: 0.85rem;
-  letter-spacing: 1.5px;
-  font-family: var(--font-hud);
-}
-
-.audio-prompt-info span {
+/* Fast stream badge & streaming indicators */
+.boot-speed-tag {
   font-size: 0.72rem;
-  color: #a4b8d1;
-  font-family: var(--font-mono);
-}
-
-.audio-prompt-btn {
-  background: var(--neon-cyan);
   color: #05080c;
-  border: none;
+  background: var(--neon-green);
   font-family: var(--font-hud);
   font-weight: 800;
-  font-size: 0.75rem;
-  padding: 7px 14px;
-  border-radius: 4px;
-  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 3px;
   letter-spacing: 1px;
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  box-shadow: 0 0 12px rgba(0, 255, 157, 0.5);
+  animation: pulseIndicatorBlink 1.4s infinite;
 }
 
-.audio-prompt-btn:hover {
-  background: #fff;
-  transform: scale(1.04);
+.boot-stream-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.68rem;
+  color: var(--neon-green);
+  font-family: var(--font-mono);
+  letter-spacing: 1px;
+}
+
+.blink-dot {
+  display: inline-block;
+  color: var(--neon-green);
+  animation: pulseIndicatorBlink 0.6s infinite;
+}
+
+/* Brand glitch animation */
+.brand-glitch {
+  position: relative;
+  display: inline-block;
+}
+
+/* Navbar voice indicator badge */
+.hud-voice-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 255, 157, 0.12);
+  border: 1px solid var(--neon-green);
+  color: var(--neon-green);
+  font-family: var(--font-hud);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  box-shadow: 0 0 15px rgba(0, 255, 157, 0.4);
+  white-space: nowrap;
+  animation: audioPromptPulse 1.5s infinite ease-in-out;
+}
+
+.hud-voice-badge.hidden {
+  display: none !important;
 }
 
 .boot-header {
@@ -1096,6 +1073,18 @@ html, body {
   color: #fff;
 }
 
+.term-quick-btn-accent {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.08);
+}
+
+.term-quick-btn-accent:hover {
+  background: var(--neon-cyan);
+  color: #05080c;
+  font-weight: bold;
+}
+
 .terminal-screen {
   padding: 16px;
   font-family: var(--font-mono);
@@ -1109,68 +1098,90 @@ html, body {
 .term-line {
   margin-bottom: 6px;
   line-height: 1.5;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .term-prompt {
-  color: var(--neon-red);
+  color: var(--neon-green);
   font-weight: bold;
+  margin-right: 6px;
 }
 
-.term-system { color: #8ea3bf; }
-.term-accent { color: var(--neon-green); }
-.term-danger { color: var(--neon-red); font-weight: bold; }
-.term-warn { color: var(--neon-amber); }
+.term-input-echo {
+  color: #fff;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  padding-bottom: 4px;
+}
+
+.term-system { color: var(--neon-cyan); font-weight: 600; }
+.term-accent { color: var(--neon-green); font-weight: 600; }
 .term-muted { color: var(--text-muted); }
-.term-hl { color: #fff; font-weight: bold; }
+.term-warn { color: var(--neon-amber); }
+.term-danger { color: var(--neon-red); }
+.term-hl { color: var(--neon-cyan); font-weight: bold; }
+.term-link { color: var(--neon-green); text-decoration: underline; }
+.term-link:hover { color: #fff; text-shadow: var(--neon-green-glow); }
 
 .term-block {
-  background: rgba(255, 255, 255, 0.03);
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+.term-box {
+  background: rgba(0, 255, 157, 0.04);
   border-left: 3px solid var(--neon-green);
-  padding: 10px 14px;
-  margin: 8px 0;
-  border-radius: 2px;
+  padding: 8px 12px;
+  border-radius: 0 4px 4px 0;
 }
 
 .term-box-danger {
-  border-left-color: var(--neon-red);
-  background: rgba(255, 0, 60, 0.05);
+  background: rgba(255, 0, 60, 0.06);
+  border-left: 3px solid var(--neon-red);
+  padding: 8px 12px;
+  border-radius: 0 4px 4px 0;
 }
 
 .term-box-disclaimer {
-  border-left-color: var(--neon-cyan);
-  background: rgba(0, 240, 255, 0.05);
+  background: rgba(255, 180, 0, 0.05);
+  border-left: 3px solid var(--neon-amber);
+  padding: 8px 12px;
+  border-radius: 0 4px 4px 0;
 }
 
 .term-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 6px;
+  margin: 8px 0;
 }
 
 .term-table td {
-  padding: 3px 8px 3px 0;
+  padding: 4px 8px;
+  font-size: 0.85rem;
   vertical-align: top;
 }
 
 .neofetch-art {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  line-height: 1.35;
-  color: var(--text-main);
+  font-size: 0.8rem;
+  line-height: 1.25;
+  color: var(--neon-cyan);
   overflow-x: auto;
+  white-space: pre;
 }
 
+/* Terminal Input Bar */
 .terminal-input-bar {
   display: flex;
   align-items: center;
-  background: #070c14;
+  padding: 12px 16px;
+  background: #080d15;
   border-top: 1px solid rgba(0, 255, 157, 0.2);
-  padding: 10px 16px;
 }
 
 .terminal-prompt-label {
-  font-family: var(--font-mono);
   color: var(--neon-green);
+  font-family: var(--font-mono);
   font-weight: bold;
   font-size: 0.9rem;
   margin-right: 8px;
@@ -1183,7 +1194,7 @@ html, body {
   border: none;
   outline: none;
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 16px; /* Prevents auto-zoom in mobile Safari */
   color: #fff;
 }
 
@@ -1652,40 +1663,59 @@ html, body {
 /* ==========================================================================
    MOBILE & RESPONSIVE REFINEMENTS
    ========================================================================== */
+/* ==========================================================================
+   MOBILE & RESPONSIVE REFINEMENTS ACROSS ALL DEVICES
+   ========================================================================== */
 @media (max-width: 992px) {
   .boot-grid {
     grid-template-columns: 1fr;
-    height: calc(100vh - 180px);
+    height: 100%;
+    min-height: 0;
     overflow-y: auto;
+    gap: 12px;
   }
 
   .boot-terminal-panel {
-    min-height: 280px;
-    height: 340px;
+    min-height: 320px;
+    flex: 1;
   }
 
   .boot-hud-sidebar {
     height: auto;
     overflow-y: visible;
   }
+
+  .dossier-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   #boot-overlay {
-    padding: 12px 10px;
+    padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
   }
 
   .boot-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+    padding-bottom: 8px;
+  }
+
+  .boot-brand {
+    font-size: 0.88rem;
+    letter-spacing: 1px;
+    word-break: break-all;
   }
 
   .boot-header-actions {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
+  .boot-speed-tag,
   .boot-protocol-tag {
     font-size: 0.65rem;
     padding: 3px 6px;
@@ -1693,119 +1723,290 @@ html, body {
 
   .boot-skip-btn {
     text-align: center;
-    padding: 5px 8px;
+    padding: 5px 10px;
     font-size: 0.72rem;
   }
 
+  .boot-content {
+    margin: 6px 0;
+    min-height: 0;
+  }
+
   .boot-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    height: calc(100vh - 170px);
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    gap: 8px;
+    overflow: hidden;
   }
 
   .boot-terminal-panel {
-    min-height: 240px;
-    height: 260px;
+    flex: 1 1 0;
+    min-height: 200px;
+    height: auto;
+    overflow: hidden;
   }
 
   .boot-logs-container {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    line-height: 1.4;
     padding: 8px;
   }
 
-  .boot-hex-stream {
-    height: 85px;
-    font-size: 0.62rem;
+  .boot-ascii-banner {
+    font-size: 0.55rem;
+    line-height: 1.15;
+    margin-bottom: 6px;
   }
 
+  .boot-hud-sidebar {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+
+  .boot-widget {
+    padding: 6px 8px;
+  }
+
+  .boot-hex-widget {
+    display: none; /* Hide large hex dump on mobile to maximize terminal view */
+  }
+
+  .spectrum-visualizer {
+    height: 32px;
+    padding: 2px 4px;
+    gap: 2px;
+  }
+
+  .boot-footer {
+    padding-top: 6px;
+  }
+
+  .progress-header {
+    font-size: 0.68rem;
+    margin-bottom: 4px;
+  }
+
+  .progress-track {
+    height: 6px;
+  }
+
+  /* Takeover Climax Banner on mobile */
   .takeover-banner-modal {
-    width: 96%;
-    padding: 16px 10px;
+    width: 95vw;
+    max-width: 95vw;
+    max-height: 86dvh;
+    overflow-y: auto;
+    padding: 18px 12px;
+    box-sizing: border-box;
   }
 
   .takeover-emblem-badge {
-    width: 90px;
-    height: 90px;
+    width: 76px;
+    height: 76px;
+    margin-bottom: 8px;
+  }
+
+  .takeover-title {
+    font-size: clamp(1.1rem, 4.5vw, 1.45rem);
+    margin-bottom: 6px;
+  }
+
+  .takeover-sub {
+    font-size: clamp(0.78rem, 3.2vw, 0.92rem);
+    margin-bottom: 8px;
+  }
+
+  .takeover-meta {
+    font-size: 0.72rem;
     margin-bottom: 10px;
   }
 
+  .takeover-details {
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .takeover-details .pill-accent,
+  .takeover-details .pill-danger {
+    font-size: 0.7rem;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .takeover-google-btn {
+    width: 100%;
+    font-size: 0.75rem;
+    padding: 10px 8px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* Dashboard Mobile Refinements */
   .hud-navbar {
-    padding: 10px 14px;
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .hud-logo {
+    gap: 8px;
+  }
+
+  .hud-brand-title {
+    font-size: 0.92rem;
+  }
+
+  .hud-status-tag {
+    font-size: 0.65rem;
   }
 
   .hud-controls {
     width: 100%;
-    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .hud-voice-badge {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.7rem;
+    padding: 5px 8px;
   }
 
   .hud-btn {
     flex: 1 1 calc(50% - 6px);
-    justify-content: center;
+    min-height: 40px;
     font-size: 0.72rem;
     padding: 8px 6px;
+    justify-content: center;
+    text-align: center;
   }
 
   .hero-breach-section,
   .terminal-section,
   .section-container {
-    margin-top: 20px;
+    margin-top: 24px;
     padding: 0 12px;
   }
 
   .breach-card {
-    padding: 16px 14px;
+    padding: 16px 12px;
   }
 
   .hero-main-title {
-    font-size: 1.5rem;
+    font-size: clamp(1.35rem, 5vw, 1.8rem);
+    line-height: 1.25;
+  }
+
+  .hero-tagline {
+    font-size: 0.88rem;
   }
 
   .hero-cta-group {
     flex-direction: column;
+    gap: 10px;
   }
 
   .cta-btn-primary,
   .cta-btn-secondary {
     width: 100%;
+    min-height: 44px;
     justify-content: center;
     text-align: center;
+    font-size: 0.8rem;
+    padding: 12px 14px;
+  }
+
+  /* Quick action pill ribbon with smooth horizontal thumb swipe */
+  .terminal-quick-pills {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .terminal-quick-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .term-quick-btn {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    padding: 6px 11px;
   }
 
   .terminal-screen {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     min-height: 220px;
-    max-height: 360px;
-    padding: 12px;
+    max-height: 380px;
+    padding: 10px;
+  }
+
+  .terminal-input-bar {
+    padding: 10px 12px;
+  }
+
+  .terminal-prompt-label {
+    font-size: 0.8rem;
+  }
+
+  #terminal-input {
+    font-size: 16px !important; /* Critical to prevent iOS auto-zoom */
   }
 
   .neofetch-art {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
   }
 
   .telemetry-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .gallery-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 
   .threat-map-grid {
     padding: 12px;
+    gap: 12px;
   }
 
   .canvas-container {
-    height: 240px;
+    height: 220px;
   }
 
   .stream-ticker-container {
-    height: 220px;
+    height: 200px;
   }
 
   .cyber-footer {
     flex-direction: column;
     text-align: center;
-    gap: 12px;
+    gap: 10px;
+    padding: 20px 14px;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 768px) {
+  .telemetry-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

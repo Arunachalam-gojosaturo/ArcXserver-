@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <title>SYSTEM COMPROMISED // HACKED BY ARUNACHALAM // ArcXOS</title>
   <meta name="description" content="ArcXOS Security Research & Presentation Console - Hacked by Arunachalam M., Arch Linux Specialist & Cybersecurity Engineer.">
   <meta name="theme-color" content="#05080c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.css">
@@ -20,29 +22,18 @@
   <canvas id="matrix-canvas"></canvas>
 
   <!-- =========================================================================
-       21s+ CINEMATIC HACKER BOOT & NEURAL VOICE TAKEOVER OVERLAY
+       CINEMATIC HACKER BOOT & NEURAL VOICE TAKEOVER OVERLAY (FAST STREAM)
        ========================================================================= -->
   <div id="boot-overlay">
-    <!-- Unmute prompt if browser blocks autoplay -->
-    <div id="boot-audio-prompt" class="boot-audio-prompt hidden">
-      <div class="audio-prompt-content">
-        <span class="audio-prompt-icon">🔊</span>
-        <div class="audio-prompt-info">
-          <strong>LUNA-AI NEURAL AUDIO FEED READY</strong>
-          <span>CLICK / TAP ANYWHERE TO UNMUTE LIVE OPERATOR VOICE</span>
-        </div>
-        <button id="unmute-voice-btn" class="audio-prompt-btn">⚡ UNMUTE VOICE</button>
-      </div>
-    </div>
-
     <div class="boot-header">
       <div class="boot-brand">
-        <span>⚡ ARCXOS_KERNEL_v6.10.9-arch1 // HARDENED INTERCEPT</span>
+        <span class="brand-glitch" data-text="⚡ ARCXOS_KERNEL_v6.10.9-arch1 // HARDENED INTERCEPT">⚡ ARCXOS_KERNEL_v6.10.9-arch1 // HARDENED INTERCEPT</span>
       </div>
       <div class="boot-header-actions">
-        <span class="boot-protocol-tag">PROTO: LUNA-AI // SEC: NULLIFIED</span>
-        <button id="skip-boot-btn" class="boot-skip-btn" title="Skip to console for live presentations">
-          ⚡ OVERRIDE / SKIP [ENTER CONSOLE]
+        <span class="boot-speed-tag">⚡ FAST STREAM 60FPS</span>
+        <span class="boot-protocol-tag">PROTO: LUNA-AI // UID=0</span>
+        <button id="skip-boot-btn" class="boot-skip-btn" title="Skip directly to presentation console (or press ESC)">
+          ⚡ OVERRIDE / SKIP [ESC]
         </button>
       </div>
     </div>
@@ -58,6 +49,7 @@
               <span class="dot dot-green"></span>
             </div>
             <span class="boot-terminal-title">arcxos-kernel-shell [TTY1 / INTERRUPT_HOOK_RING0]</span>
+            <span class="boot-stream-indicator"><span class="blink-dot">●</span> STREAMING LOGS</span>
             <span class="boot-terminal-time" id="boot-clock">00:00:00 UTC</span>
           </div>
           <!-- Fast scrolling boot & breach telemetry logs -->
@@ -170,7 +162,11 @@
       </div>
 
       <div class="hud-controls">
-        <button id="replay-takeover-btn" class="hud-btn hud-btn-danger" title="Replay 21-sec device takeover">
+        <div id="hud-voice-indicator" class="hud-voice-badge hidden">
+          <span class="pulse-indicator"></span>
+          <span>🎙️ LUNA-AI: LIVE</span>
+        </div>
+        <button id="replay-takeover-btn" class="hud-btn hud-btn-danger" title="Replay fast hacker takeover">
           <span>☠️ REPLAY TAKEOVER</span>
         </button>
         <button id="toggle-audio-btn" class="hud-btn" title="Toggle cyber sound effects">
@@ -269,8 +265,13 @@
           <button class="term-quick-btn" data-cmd="luna">luna</button>
           <button class="term-quick-btn" data-cmd="target">target</button>
           <button class="term-quick-btn" data-cmd="scan">scan</button>
+          <button class="term-quick-btn term-quick-btn-accent" data-cmd="attack">attack</button>
           <button class="term-quick-btn" data-cmd="neofetch">neofetch</button>
+          <button class="term-quick-btn" data-cmd="cve">cve</button>
+          <button class="term-quick-btn" data-cmd="tools">tools</button>
+          <button class="term-quick-btn" data-cmd="skills">skills</button>
           <button class="term-quick-btn" data-cmd="exploit">exploit</button>
+          <button class="term-quick-btn" data-cmd="matrix">matrix</button>
           <button class="term-quick-btn" data-cmd="google">google</button>
           <button class="term-quick-btn" data-cmd="disclaimer">disclaimer</button>
           <button class="term-quick-btn term-quick-btn-danger" data-cmd="replay">replay</button>
